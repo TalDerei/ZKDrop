@@ -7,7 +7,8 @@
     "build": "npm run clean && npm run compile",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "scripts": "bash ./scripts/circuits.sh"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,8 @@
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.2",
     "hardhat": "^2.9.3",
-    "ts-node": "^10.7.0"
+    "ts-node": "^10.7.0",
+    "circomlib": "^0.5.2"
   },
   "dependencies": {
     "dotenv": "^16.0.0"
