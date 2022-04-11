@@ -3,6 +3,7 @@ import Form from "../../components/form"
 import Link from 'next/link'
 import {toFixedHex } from "../../utils/ethers"
 import { MiMCSponge } from "../../utils/merkleTree"
+import { toBigIntLE } from "../../utils/circuit"
 
 export default function commitment () {
     const [state, setState] = useState ({
@@ -23,6 +24,10 @@ export default function commitment () {
 
         alert("commitment! Nullifier: " + state.nullifier + " and Secret: " + state.secret);
         alert("hash! hash: " + hash);
+
+        const sauce = toBigIntLE(state.secret).toString();
+        console.log(sauce);
+
     }
 
     return (
