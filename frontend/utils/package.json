@@ -1,0 +1,21 @@
+{
+  "name": "simple-tornado",
+  "license": "MIT",
+  "main": "lib/circuit.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "types": "lib/circuit.d.ts",
+  "prepare": "npm run build",
+  "files": [
+    "/lib"
+  ],
+  "devDependencies": {
+    "typescript": "^4.5.4",
+    "@types/mocha": "^8.2.0"
+  },
+  "dependencies": {
+    "circomlibjs": "^0.0.8",
+    "snarkjs": "^0.4.10"
+  }
+}

@@ -1,9 +1,6 @@
 import { useState } from "react";
 import Form from "../../components/form"
-import Link from 'next/link'
-import {toFixedHex } from "../../utils/ethers"
-import { MiMCSponge } from "../../utils/merkleTree"
-import { toBigIntLE } from "../../utils/circuit"
+import { pedersenHash, toBufferLE } from '../../utils';
 
 export default function commitment () {
     const [state, setState] = useState ({
@@ -18,15 +15,14 @@ export default function commitment () {
 
     // commitment = hash(nullifier, secret)
     async function commitment() {
-        state.secret = toFixedHex(state.secret);
-        state.nullifier = toFixedHex(state.nullifier);
-        const hash = await MiMCSponge(state.secret, state.nullifier);
-
-        alert("commitment! Nullifier: " + state.nullifier + " and Secret: " + state.secret);
-        alert("hash! hash: " + hash);
-
-        const sauce = toBigIntLE(state.secret).toString();
-        console.log(sauce);
+        state.secret = BigInt(state.secret);
+        state.nullifier = BigInt(state.nullifier);
+        const nullifier_buffer = toBufferLE(state.nullifier, 31);
+        const secret_buffer = toBufferLE(state.secret, 31);
+        const concat = Buffer.concat([nullifier_buffer, secret_buffer]);
+        commitment = pedersenHash(concat);
+        console.log(commitment);
+        setState({...state});
 
     }
 
