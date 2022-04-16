@@ -55,4 +55,10 @@ function toBigIntLE(buf: Buffer) {
   return BigInt(`0x${hex}`);
 }
 
-export { genProofArgs, unstringifyBigInts, toBigIntLE, pedersenHash, toBufferLE, groth16 };
+/** BigNumber to hex string of specified length */
+function toFixedHex(number: number | string, length = 32) {
+  const str = BigInt(number).toString(16);
+  return "0x" + str.padStart(length * 2, "0");
+}
+
+export { genProofArgs, unstringifyBigInts, toBigIntLE, pedersenHash, toBufferLE, toFixedHex, groth16 };

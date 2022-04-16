@@ -3,7 +3,8 @@
   "license": "MIT",
   "main": "lib/circuit.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "ts-mocha"
   },
   "types": "lib/circuit.d.ts",
   "prepare": "npm run build",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "circomlibjs": "^0.0.8",
-    "snarkjs": "^0.4.10"
+    "snarkjs": "^0.4.10",
+    "ts-mocha": "^8.0.0"
   }
 }

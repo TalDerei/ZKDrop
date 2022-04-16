@@ -5,3 +5,4 @@ typechain/
 artifacts/
 coverage*
 .env
+package-lock.json
