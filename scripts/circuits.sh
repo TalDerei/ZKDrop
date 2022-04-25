@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # 1. Build withdraw.circom and merkleTree.circom circuits
-TARGET_CIRCUIT=../../circuits/withdraw.circom
-PTAU_FILE=../../build/circuits/pot12_final.ptau
+TARGET_CIRCUIT=../../circuits/circuit.circom
+PTAU_FILE=./pot12_final.ptau
 ENTROPY_FOR_ZKEY=ksmdksmksdmk
-mkdir -p ./build/circuits
-cd ./build/circuits
+mkdir -p ../build/circuits
+cd ../build/circuits
 
 ## generate circuit.r1cs & circuit.sym & circuit.wasm
 echo 'Generating circuit.r1cs & circuit.sym & circuit.wasm'
@@ -36,7 +36,7 @@ cd ../../contracts/
 
 if [ -f ../build/circuits/circuit_final.zkey ]; then
 
-  snarkjs zkey export solidityverifier ../build/circuits/circuit_final.zkey Verifier.sol
+  snarkjs zkey export solidityverifier ../scripts/build/circuits/circuit_final.zkey Verifier.sol
   [ $? -eq 0 ] && echo "success: ./contracts/Verifier.sol"
 
 else

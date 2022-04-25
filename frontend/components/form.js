@@ -1,36 +1,36 @@
 export default function Form({ state, setState }) {
-    const handleChangeNullifier = (e)=>{
-        const value = e.target.value;
-        setState({
-         ...state,
-         [e.target.name]: value
-        });
-    }
-    const handleChangeSecret = (e)=>{
-        const value = e.target.value;
-        setState({
-         ...state,
-         [e.target.name]: value
-        });
-    }
-     
     return (
         <form>
-            <label>
-            Nullifier
-            <input type="text" name="nullifier" value={state.nullifier}
-                onChange={handleChangeNullifier}
-            />
-            </label>
             <div>
-            <br></br>
+                ENTER SECRET 
+                <input
+                    type="text"
+                    name="secret"
+                    className="form-control"
+                    value={state.secret}
+                    onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
+                />
+            </div> 
+            <div>
+                ENTER NULLIFIER
+                <input
+                    type="text"
+                    name="key"
+                    className="form-control"
+                    value={state.key}
+                    onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
+                />
             </div>
-            <label>
-            Secret
-            <input type="text" name="secret" value={state.secret}
-                onChange={handleChangeSecret}
-            />
-            </label>
+            <div>
+                AIRDROP ADDRESS
+                <input
+                    type="text"
+                    name="address"
+                    className="form-control"
+                    value={state.address}
+                    onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
+                />
+            </div>
         </form>
     );
 }

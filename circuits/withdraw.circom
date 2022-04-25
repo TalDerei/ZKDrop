@@ -1,41 +1,41 @@
-include "../node_modules/circomlib/circuits/pedersen.circom";
-include "../node_modules/circomlib/circuits/bitify.circom";
-include "./merkleTree.circom";
+// include "../node_modules/circomlib/circuits/pedersen.circom";
+// include "../node_modules/circomlib/circuits/bitify.circom";
+// include "./merkleTree.circom";
 
-// pedersen hash of (nullifier + secret)
-template CommitmentHasher() {
-    signal input secret;
-    signal output commitment;
+// // pedersen hash of (nullifier + secret)
+// template CommitmentHasher() {
+//     signal input secret;
+//     signal output commitment;
 
-    component hasher = Pedersen(248);
-    component secretBits = Num2Bits(248);
-    secretBits.in <== secret;
+//     component hasher = Pedersen(248);
+//     component secretBits = Num2Bits(248);
+//     secretBits.in <== secret;
 
-    for (var i = 0; i < 248; i++) {
-        hasher.in[i] <== secretBits.out[i];
-    }
+//     for (var i = 0; i < 248; i++) {
+//         hasher.in[i] <== secretBits.out[i];
+//     }
 
-    commitment <== hasher.out[0];
-}
+//     commitment <== hasher.out[0];
+// }
 
-// commitment corresponds to secret + nullifer in merkle tree of deposits
-template Withdraw(levels) {
-    signal input root;
-    signal private input secret;
-    signal private input pathElements[levels];
-    signal private input pathIndices[levels];
+// // commitment corresponds to secret + nullifer in merkle tree of deposits
+// template Withdraw(levels) {
+//     signal input root;
+//     signal private input secret;
+//     signal private input pathElements[levels];
+//     signal private input pathIndices[levels];
 
-    component hasher = CommitmentHasher();
-    hasher.secret <== secret;
+//     component hasher = CommitmentHasher();
+//     hasher.secret <== secret;
 
-    component tree = MerkleTreeCheck(levels);
-    tree.leaf <== hasher.commitment;
-    tree.root <== root;
+//     component tree = MerkleTreeCheck(levels);
+//     tree.leaf <== hasher.commitment;
+//     tree.root <== root;
     
-    for (var i = 0; i < levels; i++) {
-        tree.pathElements[i] <== pathElements[i];
-        tree.pathIndices[i] <== pathIndices[i];
-    }
-}
+//     for (var i = 0; i < levels; i++) {
+//         tree.pathElements[i] <== pathElements[i];
+//         tree.pathIndices[i] <== pathIndices[i];
+//     }
+// }
 
-component main = Withdraw(20);
+// component main = Withdraw(20);

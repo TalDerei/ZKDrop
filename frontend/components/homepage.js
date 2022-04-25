@@ -7,11 +7,11 @@ function Header(props) {
 export default function Home() {
   return (
     <div>
-      <Header title="Welcome to Private Airdrop!"/>
+      <Header title="Welcome to Private Airdrop System!"/>
       <h1 className="title">
         {' '}
         <Link href='/airdrop/commitment'>
-          <a>Get Started!</a> 
+          <a>Get Started by Clicking Here!</a> 
         </Link>
       </h1>
     </div>

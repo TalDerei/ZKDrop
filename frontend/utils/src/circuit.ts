@@ -5,7 +5,7 @@ const circomlibjs = require('circomlibjs');
 
 
 /** Compute pedersen hash */
-function pedersenHash(data: Buffer): BigInt {
+function pedersenHashMine(data: Buffer): BigInt {
   let point = circomlibjs.pedersenHash.hash(data);
   return circomlibjs.babyjub.unpackPoint(point)[0];
 }
@@ -61,4 +61,25 @@ function toFixedHex(number: number | string, length = 32) {
   return "0x" + str.padStart(length * 2, "0");
 }
 
-export { genProofArgs, unstringifyBigInts, toBigIntLE, pedersenHash, toBufferLE, toFixedHex, groth16 };
+async function getFileString(filename: any) {
+  let req = await fetch(filename);
+  return await req.text();
+}
+
+async function getFileBuffer(filename: any) {
+  let req = await fetch(filename);
+  return Buffer.from(await req.arrayBuffer());
+}
+
+function pedersenHashConcat(nullifier: BigInt, secret: BigInt): BigInt {
+  let nullBuff = toBufferLE(nullifier as any, 31);
+  let secBuff = toBufferLE(secret as any, 31);
+  let combinedBuffer = Buffer.concat([nullBuff, secBuff]);
+  return pedersenHashMine(combinedBuffer);
+}
+
+ function pedersenHash1(nullifier: BigInt): BigInt {
+  return pedersenHashMine(toBufferLE(nullifier as any, 31));
+}
+
+export { genProofArgs, unstringifyBigInts, toBigIntLE, pedersenHashMine, toBufferLE, toFixedHex, getFileString, getFileBuffer, pedersenHashConcat, pedersenHash1, groth16 };
