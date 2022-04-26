@@ -1,4 +1,4 @@
-# Private-Airdrops<br />
+# ZKDrop<br />
 Private Airdrop System with Zero-Knowledge Proofs<br />
 Tal Derei Zero-Knowledge University (ZKU)<br />
 April 2022<br />
