@@ -43,3 +43,7 @@ Frontend code containing a React/NextJS framework
 
 ```Scripts```
 Contains "build.sh" and "deploy.ts" for running Powers of Tau Ceremony and deploying the smart contracts respectively
+
+## 4 Configuration and Setup <br />
+Run "**npm i**" inside the root directory in order to install the proper dependencies. Then navigate to ```Frontend``` and follow the steps outlined in the readme.
+ 
