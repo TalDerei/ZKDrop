@@ -1,7 +1,6 @@
 import { ethers, waffle } from "hardhat";
 import { abi as ERC20_ABI, bytecode as ERC20_BYTECODE } from "@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json";
 import { BigNumber } from "@ethersproject/bignumber";
-import { MerkleTree, toHex } from "../frontend/zkp-merkle-airdrop-lib"
 
 async function main() {
     let [ownerSigner] = await ethers.getSigners();
@@ -13,7 +12,7 @@ async function main() {
         [
             "Harmony-ZK-Drop", 
             "HZD", 
-            BigNumber.from(1000000),
+            BigNumber.from(100_000),
             ownerSigner.address
         ])
     console.log(`ERC20 address: ${erc20Contract.address}`)
@@ -30,15 +29,18 @@ async function main() {
       );
 
       // deploy main private airdrop contract
-    const contractFactoryAirdrop = await ethers.getContractFactory("PrivateAirdrop");
+    const contractFactoryAirdrop = await ethers.getContractFactory("Airdrop");
     const contractAirdrop = await contractFactoryAirdrop.deploy(
         erc20Contract.address,
-        BigNumber.from(1000),
+        BigNumber.from(10_000),
         contractAirdropVerifier.address,
         "0x0c9cfdefdc634e23e99587006826af91579533a191b7d10ae7de20ecac366973"
     );
     await contractAirdrop.deployed();
     console.log("Airdrop Contract deployed to:", contractAirdrop.address);
+
+    // erc transfer to contract
+    await erc20Contract.transfer(contractAirdrop.address, 50_000);
 }
 
 main()

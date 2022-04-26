@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Form from "../../components/form";
 import { genProofArgs, groth16, pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
-import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../zkp-merkle-airdrop-lib';
+import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../lib';
 import { providers, Contract, ethers, BigNumber } from 'ethers';
 import * as AIRDROP_JSON from "../../../ABI/Airdrop.json";
 
@@ -11,6 +11,7 @@ export default function Commitment () {
         secret: "",
         commitment: "",
         commitment_bool: "",
+        airdropAddress: "",
         address: "",
         proof: ""
     });
@@ -49,7 +50,7 @@ export default function Commitment () {
         const secret_buffer = toBufferLE(state.secret, 31);
         const concat = Buffer.concat([key_buffer, secret_buffer]);
         state.commitment = pedersenHashMine(concat);
-        console.log(state.commitment);
+        console.log("commitment is: " + state.commitment);
         setState({...state});
     }
 
@@ -120,12 +121,14 @@ export default function Commitment () {
             alert("Either key or secret are missing!")
             return
         }
+        setState({...state, loading:true})
     
         // Connect to wallet, get address
         let provider = new providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         let signer = provider.getSigner();
         let address = await signer.getAddress();
+        console.log("address is: " + address)
         
         // Compute a commitment locally
         let computedCommitment = toHex(pedersenHashConcat(BigInt(state.key), BigInt(state.secret)));
@@ -134,7 +137,6 @@ export default function Commitment () {
         let mtSs = await getFileString(`http://localhost:3000/commitments.txt`);
         let wasmBuff = await getFileBuffer(`http://localhost:3000/circuit.wasm`);
         let zkeyBuff = await getFileBuffer(`http://localhost:3000/circuit_final.zkey`);
-        // let address = BigInt("0x8De93Fe026beFcc367b38C6AC1e66e0848C2C195")
         
         // Load the Merkle Tree locally
         let mt = MerkleTree.createFromStorageString(mtSs);
@@ -144,30 +146,33 @@ export default function Commitment () {
             return;
         }
         
-            let preTime = new Date().getTime();
-            console.log("key is: " + state.key)
-            console.log("secret is: " + state.secret)
-            console.log("merkle root val is: " + toHex(mt.root.val))
-            console.log("new is: " + toHex(BigInt(5705134933567172049005775365072054611742796321170844203840251944245214472563)))
+        console.log("merkle root is: " + toHex(mt.root.val))
         
         let proof = await generateProofCallData(mt, BigInt(state.key), BigInt(state.secret), address, wasmBuff, zkeyBuff);
-        let elapsed =  new Date().getTime() - preTime;
         console.log(`Time to compute proof: ${elapsed}ms`);
         setState({...state, proof: proof})
     }
 
     let collectDrop = async (proof) => {
         console.log("proof is: " + proof);
-        console.log("address is: " + state.address)
-        
+        console.log("airdrop contract address is: " + state.airdropAddress)
+
+        if (state.proof === '') {
+            alert("No proof calculated yet!")
+            return
+        }
+        if (state.airdropAddress === '') {
+            alert("No airdrop address entered!")
+            return
+        }
+
         let provider = new providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
-        let airdropAddr = "0x8De93Fe026beFcc367b38C6AC1e66e0848C2C195"
-        let contract = new Contract(airdropAddr, AIRDROP_JSON.abi, provider.getSigner());
+        let contract = new Contract(state.airdropAddress, AIRDROP_JSON.abi, provider.getSigner());
         let keyHash = pedersenHash(BigInt(state.key));
 
         try {
-            let tx = await contract.collectAirdrop(state.proof, toHex(keyHash));
+            let tx = await contract.collectAirdrop(proof, toHex(keyHash));
             await tx.wait()
         } catch (error) {
             alert("Airdrop collection failed: " + error['data']['message'])
@@ -184,29 +189,28 @@ export default function Commitment () {
                         setState={setState}
                     />
                 </div>
+                <br></br>
                 <div> 
                     <button onClick={renderCommitment}>Calculate Commitment</button>
                 </div>
-                {/* <div className="merkleTree">
-                    {renderMerkleTree()}
-                </div> */}
-                {/* <div> 
-                    <button onClick={renderGetCommitment()}>Verify in Tree</button>
-                </div> */}
-                <div>
+                {/* <div>
                     <button onClick={renderMongoDB}>Verify Commitment is in Database</button>
-                </div>
+                </div> */}
+                <br></br>
                 <div>
                     <button onClick={renderTree}>Load Merkle Tree</button>
                 </div>
+                <br></br>
                 <div> 
                     <button onClick={renderProofConstruct}>Calculate Proof</button>
                 </div>
+                <br></br>
                 <div> 
                     <button onClick={renderCollectDrop}>Collect Drop</button>
                 </div>
             </div>
         </main>
+        
     );    
 }
 

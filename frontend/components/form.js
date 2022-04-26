@@ -2,7 +2,12 @@ export default function Form({ state, setState }) {
     return (
         <form>
             <div>
+                OPEN UP DEV CONSOLE TO SEE INFO!
+            </div>
+            <br></br>
+            <div>
                 ENTER SECRET 
+                <br></br>
                 <input
                     type="text"
                     name="secret"
@@ -11,8 +16,10 @@ export default function Form({ state, setState }) {
                     onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
                 />
             </div> 
+            <br></br>
             <div>
                 ENTER NULLIFIER
+                <br></br>
                 <input
                     type="text"
                     name="key"
@@ -21,16 +28,18 @@ export default function Form({ state, setState }) {
                     onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
                 />
             </div>
+            <br></br>
             <div>
-                AIRDROP ADDRESS
-                <input
+                AIRDROP CONTRACT ADDRESS
+                <br></br>
+                  <input
                     type="text"
-                    name="address"
+                    name="airdropAddress"
                     className="form-control"
-                    value={state.address}
+                    value={state.airdropAddress}
                     onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
-                />
-            </div>
+                    />
+                </div>
         </form>
     );
 }
