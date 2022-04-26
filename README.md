@@ -1,6 +1,7 @@
-# ZKDrop<br />
-Private Airdrop System with Zero-Knowledge Proofs<br />
-Tal Derei Zero-Knowledge University (ZKU)<br />
+# ZKDrop: Private Airdrop System with Zero-Knowledge Proofs<br />
+<br />
+Tal Derei <br />
+Zero-Knowledge University (ZKU)<br />
 April 2022<br />
 
 ## 1 Motivation<br />
