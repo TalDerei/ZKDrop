@@ -31,7 +31,7 @@ The system can be extended to NFT merchandise drops where you prove you own an N
 ● MongoDB<br />
 ● React / Next.js / Ether.js / Hardhat<br />
 
-## 2 Codebase <br />
+## 3 Codebase <br />
 ```ABI```
 Contains the ABI code for the compiled "Airdrop.sol" smart contract
 
