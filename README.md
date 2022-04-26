@@ -1,7 +1,7 @@
-# Private-Airdrops
-Private Airdrop System with Zero-Knowledge Proofs
-Tal Derei Zero-Knowledge University (ZKU)
-April 2022
+# Private-Airdrops<br />
+Private Airdrop System with Zero-Knowledge Proofs<br />
+Tal Derei Zero-Knowledge University (ZKU)<br />
+April 2022<br />
 
 ## 1 Motivation<br />
 To motivate this construction, we must map out the current landscape of public crypto airdrops. To encourage participation in their protocol, blockchain-based projects typically send out free ERC-20 tokens to early adopters and active participants in their community. This system of distributing ERC-20 tokens for governance purposes (i.e. token-voting mechanism) is flawed. Participating in these airdrop events requires revealing your public wallet address (i.e. public key), and thereby doxxing your financial history associated with your public identity. Linking your public metamask address to a web3 platform reveals everything about yourself, since your public address is a gateway to publicly available transaction history on the blockchain. Consider, for example, a protocol that decides to blacklist your address from airdrop eligibility based on your DAO voting history? This warranted a system enabling users to claim airdrops completely anonymously, without revealing their public keys.<br />
