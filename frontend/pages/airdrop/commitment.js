@@ -54,27 +54,27 @@ export default function Commitment () {
         setState({...state});
     }
 
-    async function getCommitment() {
-        let post = "45"
+    // async function getCommitment() {
+    //     let post = "45"
 
-        let response = await fetch('/api/check', {
-            method: 'POST',
-            body: post
-        });
+    //     let response = await fetch('/api/check', {
+    //         method: 'POST',
+    //         body: post
+    //     });
 
-        let commitment = await response.json();
-        console.log(commitment);
+    //     let commitment = await response.json();
+    //     console.log(commitment);
 
-        if (commitment.bool == null) {
-            state.commitment_bool = false;
-            console.log("commitment is not in merkle tree!")
-        } 
-        else {
-            state.commitment_bool = true;
-            console.log("commitment is in merkle tree!")
-        }  
-        setState({...state});
-    }
+    //     if (commitment.bool == null) {
+    //         state.commitment_bool = false;
+    //         console.log("commitment is not in merkle tree!")
+    //     } 
+    //     else {
+    //         state.commitment_bool = true;
+    //         console.log("commitment is in merkle tree!")
+    //     }  
+    //     setState({...state});
+    // }
 
     // reconstruct merkle tree and load locally -- will be used an input parameter for proof generation algorithm
     let reconstructMerkleTree = async () => {
@@ -215,21 +215,21 @@ export default function Commitment () {
 }
 
 // Data on server-side sent to client (React component)
-export async function getServerSideProps(context) {
-    try {
-      const client = await clientPromise
-      const db = client.db('commitment')    
+// export async function getServerSideProps(context) {
+//     try {
+//       const client = await clientPromise
+//       const db = client.db('commitment')    
       
-      return {
-        props: { isConnected: true },
-      }
-    } catch (e) {
-      console.error(e)
-      return {
-        props: { isConnected: false },
-      }
-    }
-}
+//       return {
+//         props: { isConnected: true },
+//       }
+//     } catch (e) {
+//       console.error(e)
+//       return {
+//         props: { isConnected: false },
+//       }
+//     }
+// }
 
 async function getFileString(filename) {
   let req = await fetch(filename);
