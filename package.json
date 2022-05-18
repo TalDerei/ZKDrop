@@ -27,7 +27,7 @@
     "@types/jest": "^27.4.1",
     "@types/mocha": "^8.2.0",
     "chai": "^4.3.6",
-    "circomlib": "^0.5.2",
+    "circomlib": "^2.0.0",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.4",
     "hardhat": "^2.9.3",
@@ -37,9 +37,11 @@
     "@harmony-js/core": "^0.1.57",
     "@harmony-js/utils": "^0.1.56",
     "@openzeppelin/contracts": "^4.5.0",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.0",
     "fs": "^0.0.1-security",
     "openzeppelin-solidity": "^2.2.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "typechain": "^3.0.0"
   }
 }

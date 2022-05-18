@@ -14,7 +14,7 @@ require("dotenv").config();
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.0",
+  solidity: "0.8.11",
   networks: {
     testnet: {
       url: `https://api.s0.b.hmny.io`,

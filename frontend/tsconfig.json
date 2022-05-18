@@ -21,6 +21,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "utils"],
+  "include": ["next-env.d.ts", "utils", "zkp-merkle-airdrop-lib"],
   "exclude": ["node_modules"]
 }

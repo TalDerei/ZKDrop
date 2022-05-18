@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.11;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 // Call Plonk verifier function, passing in [1] proof, [2] set of public signals
 interface IPlonkVerifier {
@@ -13,7 +14,7 @@ interface IERC20 {
 }
 
 // Airdrop contract with merkle-tree inclusion zk-proofs
-contract Airdrop is Ownable {
+contract Airdrop is Ownable, Initializable {
     // ERC-20 token
     IERC20 public airdropToken;
     // Airdrop amount per eligible reciever

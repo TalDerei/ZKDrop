@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import Form from "../../components/form";
 import { genProofArgs, groth16, pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
-import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../lib';
+import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash, randomBigInt } from '../../zkp-merkle-airdrop-lib';
 import { providers, Contract, ethers, BigNumber } from 'ethers';
-import * as AIRDROP_JSON from "../../../ABI/Airdrop.json";
+import * as AIRDROP_JSON from "../../abi/Airdrop.json";
+// import * as crypto from "crypto";
+const crypto = require("crypto");
 
 export default function Commitment () {
     const [state, setState] = useState ({
@@ -39,6 +41,9 @@ export default function Commitment () {
     }
 
     async function commitment() {
+        // const [secretHashSeed, setSecretHashSeed] = useState([]);
+
+
         // check if secret or nullifier is null
         if (state.secret == '0' || state.key == '0') {
             console.log("secret or nullifier values are null!")
@@ -51,67 +56,71 @@ export default function Commitment () {
         const concat = Buffer.concat([key_buffer, secret_buffer]);
         state.commitment = pedersenHashMine(concat);
         console.log("commitment is: " + state.commitment);
+
+        // set key and secret
+        // console.log("hash seed is: " + generateHashSeed().then(setSecretHashSeed));
+
         setState({...state});
     }
 
-    // async function getCommitment() {
-    //     let post = "45"
+    async function getCommitment() {
+        let post = "45"
 
-    //     let response = await fetch('/api/check', {
-    //         method: 'POST',
-    //         body: post
-    //     });
+        let response = await fetch('/api/check', {
+            method: 'POST',
+            body: post
+        });
 
-    //     let commitment = await response.json();
-    //     console.log(commitment);
+        let commitment = await response.json();
+        console.log(commitment);
 
-    //     if (commitment.bool == null) {
-    //         state.commitment_bool = false;
-    //         console.log("commitment is not in merkle tree!")
-    //     } 
-    //     else {
-    //         state.commitment_bool = true;
-    //         console.log("commitment is in merkle tree!")
-    //     }  
-    //     setState({...state});
-    // }
+        if (commitment.bool == null) {
+            state.commitment_bool = false;
+            console.log("commitment is not in merkle tree!")
+        } 
+        else {
+            state.commitment_bool = true;
+            console.log("commitment is in merkle tree!")
+        }  
+        setState({...state});
+    }
 
     // reconstruct merkle tree and load locally -- will be used an input parameter for proof generation algorithm
-    let reconstructMerkleTree = async () => {
-        if (state.commitment_bool == false) {
-            console.log("need correct secret/nullifier pair to reconstruct and load merkle tree!")
-        }
-        else {
-            const levels = Number(process.env.MERKLE_TREE_HEIGHT) || 20;
+    // let reconstructMerkleTree = async () => {
+    //     if (state.commitment_bool == false) {
+    //         console.log("need correct secret/nullifier pair to reconstruct and load merkle tree!")
+    //     }
+    //     else {
+    //         const levels = Number(process.env.MERKLE_TREE_HEIGHT) || 20;
 
-            console.log("reconstrucing merkle tree, generate root, and load locally");
+    //         console.log("reconstrucing merkle tree, generate root, and load locally");
 
-            // get merkle leaves 
-            let response = await fetch('/api/retrieve', {
-                method: 'GET',
-            });
+    //         // get merkle leaves 
+    //         let response = await fetch('/api/retrieve', {
+    //             method: 'GET',
+    //         });
 
-            let data = await response.json();
-            console.log(data);
+    //         let data = await response.json();
+    //         console.log(data);
 
-            let newLeaves = [];
+    //         let newLeaves = [];
 
-            data.forEach(leaf => {
-                newLeaves.push(leaf.commitment_id);
-            });
+    //         data.forEach(leaf => {
+    //             newLeaves.push(leaf.commitment_id);
+    //         });
 
-            console.log(newLeaves)
+    //         console.log(newLeaves)
 
-            // construct new tree with leaves
-            const tree = new MerkleTree(levels, newLeaves);
+    //         // construct new tree with leaves
+    //         const tree = new MerkleTree(levels, newLeaves);
 
-            // set state for tree
-            setTree(tree);
+    //         // set state for tree
+    //         setTree(tree);
 
-            // print tree to console
-            console.log(tree);
-        }
-    }  
+    //         // print tree to console
+    //         console.log(tree);
+    //     }
+    // }  
 
     async function constructProof() {
         console.log("key is: " + state.key)
@@ -132,31 +141,50 @@ export default function Commitment () {
         
         // Compute a commitment locally
         let computedCommitment = toHex(pedersenHashConcat(BigInt(state.key), BigInt(state.secret)));
+        console.log("!!!!!!!!!!!!!! computed commitment is: " + computedCommitment)
         
         // Load files and run proof locally
         let mtSs = await getFileString(`http://localhost:3000/commitments.txt`);
         let wasmBuff = await getFileBuffer(`http://localhost:3000/circuit.wasm`);
         let zkeyBuff = await getFileBuffer(`http://localhost:3000/circuit_final.zkey`);
+        console.log(mtSs)
+        let commitments = mtSs.trim().split(",");
+        // console.log(commitments)
+        
+        // let treeheight = 5
+
+        let commitmentsBigInt = commitments.map(commitment => BigInt(commitment))
+        console.log(commitmentsBigInt)
+        // // for (let i = commitments.length; i < 2 ** treeheight; i++) {
+        // //     commitmentsBigInt.push(randomBigInt(31));
+        // // }
+        // // let commitmentsBigInts = commitmentsBigInt.map(commitmentsBigInt => BigInt(commitmentsBigInt))
+        // console.log("wooooo!")
+        // console.log(commitmentsBigInt)
+
+        // // console.log(crypto.randomBytes(31))
+        
         
         // Load the Merkle Tree locally
-        let mt = MerkleTree.createFromStorageString(mtSs);
+        // let mt = MerkleTree.createFromStorageString(mtSs);
+        let mt = MerkleTree.createFromLeaves(commitmentsBigInt);
+
         if (!mt.leafExists(BigInt(computedCommitment))) {
             alert("Leaf corresponding to (key,secret) does not exist in MerkleTree.");
             setState({...state})
             return;
         }
-        
         console.log("merkle root is: " + toHex(mt.root.val))
         
         let proof = await generateProofCallData(mt, BigInt(state.key), BigInt(state.secret), address, wasmBuff, zkeyBuff);
-        console.log(`Time to compute proof: ${elapsed}ms`);
+
+        console.log("proof is: " + proof);
+        console.log("airdrop contract address is: " + state.airdropAddress)
+
         setState({...state, proof: proof})
     }
 
     let collectDrop = async (proof) => {
-        console.log("proof is: " + proof);
-        console.log("airdrop contract address is: " + state.airdropAddress)
-
         if (state.proof === '') {
             alert("No proof calculated yet!")
             return
@@ -215,21 +243,21 @@ export default function Commitment () {
 }
 
 // Data on server-side sent to client (React component)
-// export async function getServerSideProps(context) {
-//     try {
-//       const client = await clientPromise
-//       const db = client.db('commitment')    
+export async function getServerSideProps(context) {
+    try {
+      const client = await clientPromise
+      const db = client.db('commitment')    
       
-//       return {
-//         props: { isConnected: true },
-//       }
-//     } catch (e) {
-//       console.error(e)
-//       return {
-//         props: { isConnected: false },
-//       }
-//     }
-// }
+      return {
+        props: { isConnected: true },
+      }
+    } catch (e) {
+      console.error(e)
+      return {
+        props: { isConnected: false },
+      }
+    }
+}
 
 async function getFileString(filename) {
   let req = await fetch(filename);

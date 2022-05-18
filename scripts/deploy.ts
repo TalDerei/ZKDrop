@@ -1,46 +1,61 @@
 import { ethers, waffle } from "hardhat";
-import { abi as ERC20_ABI, bytecode as ERC20_BYTECODE } from "@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json";
+import { abi as ABI, bytecode as BYTECODE } from "@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json";
 import { BigNumber } from "@ethersproject/bignumber";
 
 async function main() {
-    let [ownerSigner] = await ethers.getSigners();
-    
-    // deploy erc-20 contract
-    let erc20Contract = await waffle.deployContract(
-        ownerSigner,
-        {bytecode: ERC20_BYTECODE, abi: ERC20_ABI}, 
+    const [signer] = await ethers.getSigners();
+
+    // Deploy ERC-20 contract
+    let ERC20Contract = await waffle.deployContract(
+        signer, {bytecode: BYTECODE, abi: ABI},
         [
             "Harmony-ZK-Drop", 
             "HZD", 
             BigNumber.from(100_000),
-            ownerSigner.address
+            signer.address
         ])
-    console.log(`ERC20 address: ${erc20Contract.address}`)
-
-    // deploy verifier contract
+    console.log(`ERC-20 Address: ${ERC20Contract.address}`)
+    
+    // Deploy circuit verifier contract
     const contractFactoryVerifier = await ethers.getContractFactory(
         "PlonkVerifier"
-      );
-      const contractAirdropVerifier = await contractFactoryVerifier.deploy();
-      await contractAirdropVerifier.deployed();
-      console.log(
-        "AirdropVerifier Contract deployed to:",
-        contractAirdropVerifier.address
-      );
-
-      // deploy main private airdrop contract
-    const contractFactoryAirdrop = await ethers.getContractFactory("Airdrop");
-    const contractAirdrop = await contractFactoryAirdrop.deploy(
-        erc20Contract.address,
-        BigNumber.from(10_000),
-        contractAirdropVerifier.address,
-        "0x0c9cfdefdc634e23e99587006826af91579533a191b7d10ae7de20ecac366973"
     );
-    await contractAirdrop.deployed();
-    console.log("Airdrop Contract deployed to:", contractAirdrop.address);
+    const contractLotteryVerifier = await contractFactoryVerifier.deploy();
+    await contractLotteryVerifier.deployed();
+    console.log("Lottery Verifier Contract Address: ", contractLotteryVerifier.address);
 
-    // erc transfer to contract
-    await erc20Contract.transfer(contractAirdrop.address, 50_000);
+    // Deploy private lottery contract implementation
+    const privateLotteryContract = await ethers.getContractFactory(
+        "PrivateLottery"
+    );
+    const privateLottery = await privateLotteryContract.deploy();
+    await privateLottery.deployed();
+    console.log("Private Lottery Contract Address: ", privateLottery.address);
+
+    // Deploy private lottery factory contract 
+    const privateLotteryContractFactory = await ethers.getContractFactory(
+        "FactoryAirdrop"
+    );
+    const factory = await privateLotteryContractFactory.deploy(
+        privateLottery.address,
+        contractLotteryVerifier.address
+    );
+    await factory.deployed();
+    console.log("Private Lottery Factory Contract Address: ", factory.address);
+
+    // // // Transfer ERC-20 to contract
+    // // await ERC20Contract.transfer(privateLottery.address, 50_000);
+
+    let txn = await factory
+        .connect(signer)
+        .createLottery(
+            "0xb20A2739B961F32A7dfC15aE31029F99C386333F",
+            BigNumber.from(10_000),
+            "0xD9b81Bd828b79a1DcbB51Db5587638Ad07F34110",
+            "0x0c9cfdefdc634e23e99587006826af91579533a191b7d10ae7de20ecac366973"
+        )
+    const { events } = await txn.wait()
+    console.log(events)
 }
 
 main()

@@ -1,108 +1,110 @@
-// // Massively borrowed from tornado cash: https://github.com/tornadocash/tornado-core/tree/master/circuits
-// include "../node_modules/circomlib/circuits/bitify.circom";
-// include "../node_modules/circomlib/circuits/mimcsponge.circom";
-// include "../node_modules/circomlib/circuits/pedersen.circom";
+pragma circom 2.0.0;
 
-// // Computes MiMC([left, right])
-// template HashLeftRight() {
-//     signal input left;
-//     signal input right;
-//     signal output hash;
+// Massively borrowed from tornado cash: https://github.com/tornadocash/tornado-core/tree/master/circuits
+include "../node_modules/circomlib/circuits/bitify.circom";
+include "../node_modules/circomlib/circuits/mimcsponge.circom";
+include "../node_modules/circomlib/circuits/pedersen.circom";
 
-//     component hasher = MiMCSponge(2, 220, 1);
-//     hasher.ins[0] <== left;
-//     hasher.ins[1] <== right;
-//     hasher.k <== 0;
-//     hash <== hasher.outs[0];
-// }
+// Computes MiMC([left, right])
+template HashLeftRight() {
+    signal input left;
+    signal input right;
+    signal output hash;
 
-// // if s == 0 returns [in[0], in[1]]
-// // if s == 1 returns [in[1], in[0]]
-// template DualMux() {
-//     signal input in[2];
-//     signal input s;
-//     signal output out[2];
+    component hasher = MiMCSponge(2, 220, 1);
+    hasher.ins[0] <== left;
+    hasher.ins[1] <== right;
+    hasher.k <== 0;
+    hash <== hasher.outs[0];
+}
 
-//     s * (1 - s) === 0;
-//     out[0] <== (in[1] - in[0])*s + in[0];
-//     out[1] <== (in[0] - in[1])*s + in[1];
-// }
+// if s == 0 returns [in[0], in[1]]
+// if s == 1 returns [in[1], in[0]]
+template DualMux() {
+    signal input in[2];
+    signal input s;
+    signal output out[2];
 
-// // Verifies that merkle proof is correct for given merkle root and a leaf
-// // pathIndices input is an array of 0/1 selectors telling whether given pathElement is on the left or right side of merkle path
-// template MerkleTreeChecker(levels) {
-//     signal input leaf;
-//     signal input root;
-//     signal input pathElements[levels];
-//     signal input pathIndices[levels];
+    s * (1 - s) === 0;
+    out[0] <== (in[1] - in[0])*s + in[0];
+    out[1] <== (in[0] - in[1])*s + in[1];
+}
 
-//     component selectors[levels];
-//     component hashers[levels];
+// Verifies that merkle proof is correct for given merkle root and a leaf
+// pathIndices input is an array of 0/1 selectors telling whether given pathElement is on the left or right side of merkle path
+template MerkleTreeChecker(levels) {
+    signal input leaf;
+    signal input root;
+    signal input pathElements[levels];
+    signal input pathIndices[levels];
 
-//     for (var i = 0; i < levels; i++) {
-//         selectors[i] = DualMux();
-//         selectors[i].in[0] <== i == 0 ? leaf : hashers[i - 1].hash;
-//         selectors[i].in[1] <== pathElements[i];
-//         selectors[i].s <== pathIndices[i];
+    component selectors[levels];
+    component hashers[levels];
 
-//         hashers[i] = HashLeftRight();
-//         hashers[i].left <== selectors[i].out[0];
-//         hashers[i].right <== selectors[i].out[1];
-//     }
+    for (var i = 0; i < levels; i++) {
+        selectors[i] = DualMux();
+        selectors[i].in[0] <== i == 0 ? leaf : hashers[i - 1].hash;
+        selectors[i].in[1] <== pathElements[i];
+        selectors[i].s <== pathIndices[i];
 
-//     root === hashers[levels - 1].hash;
-// }
+        hashers[i] = HashLeftRight();
+        hashers[i].left <== selectors[i].out[0];
+        hashers[i].right <== selectors[i].out[1];
+    }
 
-// // computes Pedersen(nullifier + secret)
-// template CommitmentHasher() {
-//     signal input nullifier;
-//     signal input secret;
-//     signal output commitment;
-//     signal output nullifierHash;
+    root === hashers[levels - 1].hash;
+}
 
-//     component commitmentHasher = Pedersen(496);
-//     component nullifierHasher = Pedersen(248);
-//     component nullifierBits = Num2Bits(248);
-//     component secretBits = Num2Bits(248);
-//     nullifierBits.in <== nullifier;
-//     secretBits.in <== secret;
-//     for (var i = 0; i < 248; i++) {
-//         nullifierHasher.in[i] <== nullifierBits.out[i];
-//         commitmentHasher.in[i] <== nullifierBits.out[i];
-//         commitmentHasher.in[i + 248] <== secretBits.out[i];
-//     }
+// computes Pedersen(nullifier + secret)
+template CommitmentHasher() {
+    signal input nullifier;
+    signal input secret;
+    signal output commitment;
+    signal output nullifierHash;
 
-//     commitment <== commitmentHasher.out[0];
-//     nullifierHash <== nullifierHasher.out[0];
-// }
+    component commitmentHasher = Pedersen(496);
+    component nullifierHasher = Pedersen(248);
+    component nullifierBits = Num2Bits(248);
+    component secretBits = Num2Bits(248);
+    nullifierBits.in <== nullifier;
+    secretBits.in <== secret;
+    for (var i = 0; i < 248; i++) {
+        nullifierHasher.in[i] <== nullifierBits.out[i];
+        commitmentHasher.in[i] <== nullifierBits.out[i];
+        commitmentHasher.in[i + 248] <== secretBits.out[i];
+    }
 
-// // Verifies that commitment that corresponds to given secret and nullifier is included in the merkle tree of deposits
-// template Withdraw(levels) {
-//     signal input root; // public
-//     signal input nullifierHash; // public
-//     signal input recipient; // public
+    commitment <== commitmentHasher.out[0];
+    nullifierHash <== nullifierHasher.out[0];
+}
 
-//     signal input nullifier; // private
-//     signal input secret; // private
-//     signal input pathElements[levels]; // private
-//     signal input pathIndices[levels]; // private
+// Verifies that commitment that corresponds to given secret and nullifier is included in the merkle tree of deposits
+template Withdraw(levels) {
+    signal input root; // public
+    signal input nullifierHash; // public
+    signal input recipient; // public
 
-//     component hasher = CommitmentHasher();
-//     hasher.nullifier <== nullifier;
-//     hasher.secret <== secret;
-//     hasher.nullifierHash === nullifierHash;
+    signal input nullifier; // private
+    signal input secret; // private
+    signal input pathElements[levels]; // private
+    signal input pathIndices[levels]; // private
 
-//     component tree = MerkleTreeChecker(levels);
-//     tree.leaf <== hasher.commitment;
-//     tree.root <== root;
-//     for (var i = 0; i < levels; i++) {
-//         tree.pathElements[i] <== pathElements[i];
-//         tree.pathIndices[i] <== pathIndices[i];
-//     }
+    component hasher = CommitmentHasher();
+    hasher.nullifier <== nullifier;
+    hasher.secret <== secret;
+    hasher.nullifierHash === nullifierHash;
 
-//     // Squares used to prevent optimizer from removing constraints
-//     signal recipientSquare;
-//     recipientSquare <== recipient * recipient;
-// }
+    component tree = MerkleTreeChecker(levels);
+    tree.leaf <== hasher.commitment;
+    tree.root <== root;
+    for (var i = 0; i < levels; i++) {
+        tree.pathElements[i] <== pathElements[i];
+        tree.pathIndices[i] <== pathIndices[i];
+    }
 
-// component main = Withdraw(13); // This value  corresponds to width of tree (2^x)
+    // Squares used to prevent optimizer from removing constraints
+    signal recipientSquare;
+    recipientSquare <== recipient * recipient;
+}
+
+component main {public [root, nullifierHash, recipient]} = Withdraw(7); // This value  corresponds to width of tree (2^x)
