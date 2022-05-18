@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { readFileSync, writeFileSync } from 'fs';
-import { MerkleTree, pedersenHashConcat, toHex } from '../frontend/zkp-merkle-airdrop-lib';
+import { MerkleTree, pedersenHashConcat, toHex } from '../frontend/zkp-merkle-airdrop-lib/lib';
 
 export function randomBigInt(nBytes: number): BigInt {
     return toBigIntLE(crypto.randomBytes(nBytes));
@@ -23,13 +23,11 @@ export function getMerkleTreeFromPublicListOfCommitments (filename: string, outp
     let counter = 0;
     let commitmentsBigInt: BigInt[] = commitments.map(commitment => BigInt(commitment))
     for (let i = 0; i < commitments.length; i++) {
-        console.log(commitmentsBigInt[i])
-        counter++
+        // console.log(commitmentsBigInt[i])
     }
     for (let i = commitments.length; i < 2 ** treeheight; i++) {
         commitmentsBigInt.push(randomBigInt(31));
-        console.log(commitmentsBigInt[i])
-        counter++
+        // console.log(commitmentsBigInt[i])
     }
  
     let newCommitments = commitmentsBigInt.toString();

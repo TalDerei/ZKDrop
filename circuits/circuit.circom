@@ -1,11 +1,12 @@
 pragma circom 2.0.0;
 
-// Massively borrowed from tornado cash: https://github.com/tornadocash/tornado-core/tree/master/circuits
+// References withdraw.circom and merkletree.circom circuits 
+// fromTornado Cash: https://github.com/tornadocash/tornado-core/tree/master/circuits
 include "../node_modules/circomlib/circuits/bitify.circom";
 include "../node_modules/circomlib/circuits/mimcsponge.circom";
 include "../node_modules/circomlib/circuits/pedersen.circom";
 
-// Computes MiMC([left, right])
+// Computes MiMC([left, right]) hash for recursively constructing merkle root
 template HashLeftRight() {
     signal input left;
     signal input right;
@@ -30,8 +31,7 @@ template DualMux() {
     out[1] <== (in[0] - in[1])*s + in[1];
 }
 
-// Verifies that merkle proof is correct for given merkle root and a leaf
-// pathIndices input is an array of 0/1 selectors telling whether given pathElement is on the left or right side of merkle path
+// Verifies merkle proof is correct for merkle root and leaf
 template MerkleTreeChecker(levels) {
     signal input leaf;
     signal input root;
@@ -55,7 +55,7 @@ template MerkleTreeChecker(levels) {
     root === hashers[levels - 1].hash;
 }
 
-// computes Pedersen(nullifier + secret)
+// Computes Pedersen(nullifier + secret) hash
 template CommitmentHasher() {
     signal input nullifier;
     signal input secret;
@@ -78,16 +78,18 @@ template CommitmentHasher() {
     nullifierHash <== nullifierHasher.out[0];
 }
 
-// Verifies that commitment that corresponds to given secret and nullifier is included in the merkle tree of deposits
+// Verify commitment corresponds to secret/nullifier pair in merkle tree
 template Withdraw(levels) {
-    signal input root; // public
-    signal input nullifierHash; // public
-    signal input recipient; // public
+    // Public inputs 
+    signal input root; 
+    signal input nullifierHash;
+    signal input recipient; 
 
-    signal input nullifier; // private
-    signal input secret; // private
-    signal input pathElements[levels]; // private
-    signal input pathIndices[levels]; // private
+    // Private inputs
+    signal input nullifier;
+    signal input secret; 
+    signal input pathElements[levels]; 
+    signal input pathIndices[levels]; 
 
     component hasher = CommitmentHasher();
     hasher.nullifier <== nullifier;
@@ -107,4 +109,4 @@ template Withdraw(levels) {
     recipientSquare <== recipient * recipient;
 }
 
-component main {public [root, nullifierHash, recipient]} = Withdraw(7); // This value  corresponds to width of tree (2^x)
+component main {public [root, nullifierHash, recipient]} = Withdraw(6); // Width of tree is 2^x

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Form from "../../components/form";
 import { genProofArgs, groth16, pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
-import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash, randomBigInt } from '../../zkp-merkle-airdrop-lib';
+import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../zkp-merkle-airdrop-lib/lib';
 import { providers, Contract, ethers, BigNumber } from 'ethers';
 import * as AIRDROP_JSON from "../../abi/Airdrop.json";
 // import * as crypto from "crypto";

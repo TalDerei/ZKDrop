@@ -3,8 +3,6 @@
 import { ethers, waffle } from "hardhat";
 import { abi as ERC20_ABI, bytecode as ERC20_BYTECODE } from "@openzeppelin/contracts/build/contracts/ERC20PresetFixedSupply.json";
 import { BigNumber } from "@ethersproject/bignumber";
-import { readFileSync, writeFileSync } from 'fs';
-import { MerkleTree, pedersenHashConcat, toHex } from '../frontend/zkp-merkle-airdrop-lib/lib';
 import { getMerkleTreeFromPublicListOfCommitments, getMerkleRoot } from '../utils/util';
 
 async function main() {
@@ -12,9 +10,9 @@ async function main() {
 
     let commitmentsFileName = "./public/commitments.txt" 
     let output_file = "./frontend/public/commitments.txt"
-    let mt = getMerkleTreeFromPublicListOfCommitments(commitmentsFileName, output_file, 7)
+    let mt = getMerkleTreeFromPublicListOfCommitments(commitmentsFileName, output_file, 6)
     let newRoot = getMerkleRoot(mt)
-    console.log("root hash is: " + newRoot)
+    console.log("Root hash is: " + newRoot)
 
     // deploy erc-20 contract
     let erc20Contract = await waffle.deployContract(
