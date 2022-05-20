@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { readFileSync, writeFileSync } from 'fs';
-import { MerkleTree, pedersenHashConcat, toHex } from '../frontend/zkp-merkle-airdrop-lib/lib';
+import { MerkleTree, pedersenHashConcat, toHex } from '../frontend/zkp-merkle-airdrop-libs/lib';
 
 export function randomBigInt(nBytes: number): BigInt {
     return toBigIntLE(crypto.randomBytes(nBytes));

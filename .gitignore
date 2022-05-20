@@ -1,13 +1,8 @@
 node_modules/
 cache/
-build/
 typechain/
 artifacts/
 coverage*
 .env
 package-lock.json
 .DS_Store
-frontend/public/commitments.txt
-frontend/public/circuit_final.zkey
-frontend/public/circuit.wasm
-contracts/compiled/MerkVerifier.sol

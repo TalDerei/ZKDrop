@@ -1,0 +1,1 @@
+curl -H "Authorization: token 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" "Accept: application/vnd.github.v3+json" https://api.github.com/gists/d29bfc84b81f84fe09a1995256efa892/comments | grep body | sed 's/.*://' |  tr -d '"' | sed 's/^[[:space:]]*//g' > ./public/test.txt
