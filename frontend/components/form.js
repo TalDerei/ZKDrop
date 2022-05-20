@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Form({ state, setState }) {
     return (
         <form>

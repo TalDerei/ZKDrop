@@ -1,19 +1,15 @@
 import Link from "next/link";
-
-function Header(props) {
-  return <h1>{props.title}</h1>
-}
+import { Button } from "reactstrap";
 
 export default function Home() {
   return (
     <div>
-      <Header title="Welcome to Private Airdrop System!"/>
-      <h1 className="title">
-        {' '}
-        <Link href='/airdrop/commitment'>
-          <a>Get Started by Clicking Here!</a> 
+        <Link href='/airdrop/wager' passHref>
+          <button class="button button1 enter">ENTER LOTTERY DRAWING</button>
         </Link>
-      </h1>
+        <Link href='/airdrop/commitment' passHref>
+          <button class="button button2 draw">CHECK LOTTERY STATUS </button>
+        </Link>
     </div>
   );
 }
