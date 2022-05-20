@@ -5,8 +5,8 @@ import * as THREE from "three";
 import Form from "../../components/form";
 import { pedersenHashConcat, toHex } from '../../zkp-merkle-airdrop-libs/lib';
 import sjcl from 'sjcl'
-var uuid = require("uuid");
 import Gist from "../../components/gist";
+var uuid = require("uuid");
 
 export default function About() {
     const [state, setState] = useState ({

@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Form from "../../components/form";
 import { pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
 import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../zkp-merkle-airdrop-libs/lib';
 import { providers, Contract, ethers, BigNumber } from 'ethers';
 import * as AIRDROP_JSON from "../../abi/PrivateLottery.json";
-import GoBack from "../../components/goBack";
+// import GoBack from "../../components/goBack";
+import NET from "vanta/dist/vanta.net.min";
+import * as THREE from "three";
 
 // import * as crypto from "crypto";
 const crypto = require("crypto");
@@ -31,19 +33,15 @@ export default function Commitment () {
         constructProof();
     }
 
-    let renderTree = () => {
-        reconstructMerkleTree();
-    }
-
     let renderCollectDrop = () => {
         collectDrop(state.proof);
     }
 
     async function commitment() {
         // check if secret or nullifier is null
-        if (state.secret == '0' || state.key == '0') {
-            console.log("secret or nullifier values are null!")
-            return;
+        if (state.key === '' || state.secret === '')  {
+            alert("Either key or secret are missing!")
+            return
         }
 
         state.computedCommitment = toHex(pedersenHashConcat(BigInt(state.key), BigInt(state.secret)));
@@ -138,36 +136,60 @@ export default function Commitment () {
         }
         setState({...state})
     }
-    
+
+    const [vantaEffect, setVantaEffect] = useState(0);
+    const vantaRef = useRef(null);
+    useEffect(() => {
+        if (!vantaEffect) {
+        setVantaEffect(
+            NET({
+            el: vantaRef.current,
+            THREE,
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 500.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x463131,
+            backgroundColor: 0x6b6b82,
+            maxDistance: 13.00
+            })
+        )
+        }
+        return () => {
+        if (vantaEffect) {
+            vantaEffect.destroy()
+        }
+        }
+    }, [vantaEffect])
+        
     return (
-        <main>
+        <main ref={vantaRef}>
+            <section class="general">
             <div className="container">
-                <div>
+                <div class="status">
+                    <large>CHECK LOTTERY STATUS</large>
+                </div>
+                <div class="form-class-top">
                     <Form 
                         state={state}
                         setState={setState}
                     />
                 </div>
-                <br></br>
-                <div> 
-                    <button onClick={renderCommitment}>Calculate Commitment</button>
+                    <div class="button-group">
+                        <button class="button button1 b1" onClick={renderCommitment}>Calculate Commitment</button>
+                        <br></br>
+                        <button class="button button1 b2" onClick={renderProofConstruct}>Calculate Proof</button>
+                        <br></br>
+                        <button class="button button1 b3" onClick={renderCollectDrop}>Collect Drop</button>
+                    </div>
                 </div>
-                <br></br>
-                <div>
-                    <button onClick={renderTree}>Load Merkle Tree</button>
-                </div>
-                <br></br>
-                <div> 
-                    <button onClick={renderProofConstruct}>Calculate Proof</button>
-                </div>
-                <br></br>
-                <div> 
-                    <button onClick={renderCollectDrop}>Collect Drop</button>
-                </div>
-            </div>
-            <div className="mb-10">
+            {/* <div className="mb-10">
                 <GoBack />
-            </div>
+            </div> */}
+            </section>
         </main>
         
     );    

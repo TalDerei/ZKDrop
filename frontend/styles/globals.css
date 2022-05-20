@@ -178,3 +178,60 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+.status {
+  position:fixed; 
+  left: 45%;
+  top: 100px;
+  color:rgb(223, 213, 213);
+  font-size: 25px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.smaller-input {
+  border-radius: 7px;
+  width: 200px;
+}
+
+.form-class {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+}
+
+.form-class-top {
+  position:fixed; left:450px; bottom:295px;
+}
+
+.b1 {
+  background-color: white; 
+  color: black; 
+  border: 1px solid black;
+  border-radius: 6px;
+  opacity: 0.5;
+  padding: 12px 42px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.b2 {
+  background-color: white; 
+  color: black; 
+  border: 1px solid black;
+  border-radius: 6px;
+  opacity: 0.5;
+  padding: 12px 70px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.b3 {
+  background-color: white; 
+  color: black; 
+  border: 1px solid black;
+  border-radius: 6px;
+  opacity: 0.5;
+  padding: 12px 81px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.button-group {
+  position:fixed; left:450px; bottom:105px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
