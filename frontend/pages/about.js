@@ -3,6 +3,8 @@ import GoBack from "../components/goBack";
 import { useEffect, useRef, useState } from 'react';
 import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";
+import Footer from "../components/footer";
+import ViewSourceCode from "../components/viewSourceCode";
   
 export default function About() {
   const [vantaEffect, setVantaEffect] = useState(0);
@@ -35,19 +37,27 @@ export default function About() {
   return (
     <main ref={vantaRef}>
       <section class="general">
-        <div class="homepage">
-          <large><u>ABOUT</u></large>
-          <div class="homepag-sub">
-            <small>ZKDrop is a private airdrop system that allows users to retrieve airdrops in a privacy preserving manner.
-            Users can verify their eligibility to retrieve an airdrop without associating their public wallet. The user will
-            calculate a commitment based on hashing a secret and key pair, and upload that to github gist. At a later specified date,
-            the contract will be deployed, will choose 50% of the commitments as winners, and allow users to retrieve their airdrop
-            to any wallet if they input the correct key/secret pair used to generate that commitment. 
-            </small>
+        <div class="homepage-about">
+          <large><b>ABOUT</b></large>
+          <div class="homepage-sub">
+            <p><u>ZKDrop</u> is a private lottery airdrop system that allows users to retrieve airdrops in a privacy preserving manner. 
+            Users can verify their eligibility to collect an airdrop without associating their public wallet and doxxing their
+            fincial history. The user will calculate a commitment based on hashing a key/secret pair of sha256 hashes, and upload the commitment to github gist. 
+            The commitment serves as the user's public ID. 
+            Once the smart contract is deployed, it will randomly select 50% of the commitments in the pool as winners.
+            Using the correct key/secret pair used to generate that commitment, users can withdraw the airdrop
+            to any wallet of their choosing.
+            </p>
           </div>
         </div>
         <div className="mb-10">
           <GoBack />
+        </div>
+        <div>
+            <Footer />
+        </div>
+        <div>
+            <ViewSourceCode />
         </div>
       </section>
     </main>

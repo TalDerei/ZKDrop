@@ -8,6 +8,8 @@ import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";
 import { pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
 import Link from "next/link";
+import Footer from "../../components/footer";
+import ViewSourceCode from "../../components/viewSourceCode";
 
 // import * as crypto from "crypto";
 const crypto = require("crypto");
@@ -152,16 +154,13 @@ export default function Commitment () {
             NET({
             el: vantaRef.current,
             THREE,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
             minHeight: 200.00,
             minWidth: 500.00,
             scale: 1.00,
             scaleMobile: 1.00,
             color: 0x463131,
             backgroundColor: 0x6b6b82,
-            maxDistance: 13.00
+            maxDistance: 2.00
             })
         )
         }
@@ -239,6 +238,12 @@ export default function Commitment () {
                 </div>
             <div className="mb-10">
                 <GoBack />
+            </div>
+            <div>
+                <Footer />
+            </div>
+            <div>
+                <ViewSourceCode />
             </div>
             </section>
         </main>

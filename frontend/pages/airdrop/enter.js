@@ -9,6 +9,8 @@ import Gist from "../../components/gist";
 import GoBack from "../../components/goBack";
 var uuid = require("uuid");
 import Link from "next/link";
+import Footer from "../../components/footer";
+import ViewSourceCode from "../../components/viewSourceCode";
 
 export default function Enter() {
     const [state, setState] = useState ({
@@ -149,7 +151,7 @@ export default function Enter() {
                 </div> 
               :
                 <div>
-                  state.commitment
+                  {state.commitment}
                 </div>
               }
             </div>
@@ -164,7 +166,7 @@ export default function Enter() {
         <div class="test-lottery">
           <p>
           Smart contract will be deployed in a few days once enough commitments are collected. 
-          For now, you can test out the functionality in a sample lottery <span></span>
+          For now, make sure to add your commitment to github gist, which serves as your entry into the lottery. You can also test out the functionality in a sample lottery <span></span>
           <Link href='/airdrop/test' passHref>
             <a class="test">
               <span></span>HERE!
@@ -174,6 +176,12 @@ export default function Enter() {
         </div>
         <div className="mb-10">
           <GoBack />
+        </div>
+        <div>
+            <Footer />
+        </div>
+        <div>
+            <ViewSourceCode />
         </div>
       </section>
       
