@@ -14,8 +14,12 @@ body {
 }
 
 .homepage{
-  position:fixed; left:250px; bottom:350px;
+  position:fixed; left:250px; bottom:450px;
   color: azure;
+}
+
+.homepage-buttons{
+  position:fixed; left:250px; bottom:50px;
 }
 
 .homepage-sub{
@@ -52,12 +56,17 @@ body {
 
 .enter{
   color: rgb(0, 0, 0);
-  position:fixed; left:250px; bottom:220px;
+  position:fixed; left:250px; bottom:320px;
 }
 
 .draw{
   color: azure;
-  position:fixed; left:250px; bottom:150px;
+  position:fixed; left:250px; bottom:250px;
+}
+
+.draw-2{
+  color: azure;
+  position:fixed; left:250px; bottom:180px;
 }
 
 .button {
@@ -70,7 +79,7 @@ body {
   display: inline-block;
   font-size: 15px;
   margin: 4px 2px;
-  transition-duration: 0.5s;
+  transition-duration: 0.3s;
   cursor: pointer;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
@@ -100,6 +109,16 @@ body {
 
 }
 
+.button-draw {
+  background-color: white; 
+  color: black; 
+  border: 1px solid black;
+  border-radius: 6px;
+  opacity: 0.5;
+  padding: 12px 67px;
+
+}
+
 .button2:hover {
   background-color: grey;
   color: white;
@@ -112,8 +131,9 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size:30px;
   position: fixed;
-  left: 45%;
-  top:100px;
+  position:relative; 
+  text-align: center;
+  bottom: 150px;
   margin: 0 auto;
 }
 
@@ -162,8 +182,8 @@ body {
 
 .gist {
   position:fixed; 
-  left: 40%;
-  bottom: 100px;
+  left: 37%;
+  bottom: 120px;
   color:rgb(223, 213, 213);
   font-size: 25px;
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -179,9 +199,9 @@ body {
 }
 
 .status {
-  position:fixed; 
-  left: 45%;
-  top: 100px;
+  position:relative; 
+  text-align: center;
+  bottom: 250px;
   color:rgb(223, 213, 213);
   font-size: 25px;
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -198,7 +218,7 @@ body {
 }
 
 .form-class-top {
-  position:fixed; left:450px; bottom:295px;
+  position:fixed; left:450px; bottom:255px;
 }
 
 .b1 {
@@ -207,7 +227,7 @@ body {
   border: 1px solid black;
   border-radius: 6px;
   opacity: 0.5;
-  padding: 12px 42px;
+  padding: 12px 45px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
@@ -217,7 +237,7 @@ body {
   border: 1px solid black;
   border-radius: 6px;
   opacity: 0.5;
-  padding: 12px 70px;
+  padding: 12px 71px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
@@ -227,11 +247,52 @@ body {
   border: 1px solid black;
   border-radius: 6px;
   opacity: 0.5;
-  padding: 12px 81px;
+  padding: 12px 80px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .button-group {
-  position:fixed; left:450px; bottom:105px;
+  position:fixed; left:750px; bottom:325px;
   font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.goback {
+  position:fixed; left:100px; top:105px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: azure;
+}
+
+.commitment-new {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+  position:fixed; left:200px; bottom:180px;
+}
+
+.proof-new {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+  position:fixed; left:200px; bottom:115px;
+  width: 950px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drop-new {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+  position:fixed; left:200px; bottom:50px;
+}
+
+.test-lottery{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 20px;
+  position:fixed; left:200px; bottom:30px;
+  color:antiquewhite;
+}
+
+.test{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 20px;
+  color:antiquewhite;
 }

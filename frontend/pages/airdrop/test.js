@@ -12,7 +12,7 @@ import Link from "next/link";
 // import * as crypto from "crypto";
 const crypto = require("crypto");
 
-export default function Commitment () {
+export default function Test () {
     const [state, setState] = useState ({
         key: "",
         secret: "",
@@ -177,9 +177,9 @@ export default function Commitment () {
             <section class="general">
             <div className="container">
                 <div class="status">
-                    <large><b>OFFICIAL LOTTERY:</b></large>
+                    <large>SAMPLE LOTTERY:</large>
                     <br></br>
-                    <large><b>CHECK LOTTERY STATUS</b></large>
+                    <large>CHECK LOTTERY STATUS</large>
                 </div>
                 <div class="form-class-top">
                     <Form 

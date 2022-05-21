@@ -6,6 +6,17 @@ export default function Form({ state, setState }) {
             <div class="form-class">
                 {/* OPEN UP DEV CONSOLE TO SEE INFO! */}
             </div>
+            <div class="form-class">
+                ENTER KEY
+                <br></br>
+                <input
+                    type="text"
+                    name="key"
+                    className="smaller-input"
+                    value={state.key}
+                    onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
+                />
+            </div>
             <br></br>
             <div class="form-class">
                 ENTER SECRET 
@@ -20,19 +31,9 @@ export default function Form({ state, setState }) {
             </div> 
             <br></br>
             <div class="form-class">
-                ENTER NULLIFIER
+                ENTER AIRDROP 
                 <br></br>
-                <input
-                    type="text"
-                    name="key"
-                    className="smaller-input"
-                    value={state.key}
-                    onChange={evt => setState({...state, [evt.target.name]: evt.target.value})}
-                />
-            </div>
-            <br></br>
-            <div class="form-class">
-                ENTER AIRDROP CONTRACT ADDRESS
+                CONTRACT ADDRESS
                 <br></br>
                   <input
                     type="text"

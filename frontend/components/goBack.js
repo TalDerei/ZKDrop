@@ -4,7 +4,7 @@ export default function GoBack() {
   return (
     <div>
       <Link href="/">
-        <a className="flex w-max ml-5 font-medium space-x-1 text-indigo-300 p-3 transition-colors duration-150 rounded-md bg-slate-800 hover:bg-slate-700">
+        <a class="goback">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

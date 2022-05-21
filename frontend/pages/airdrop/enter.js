@@ -6,9 +6,11 @@ import Form from "../../components/form";
 import { pedersenHashConcat, toHex } from '../../zkp-merkle-airdrop-libs/lib';
 import sjcl from 'sjcl'
 import Gist from "../../components/gist";
+import GoBack from "../../components/goBack";
 var uuid = require("uuid");
+import Link from "next/link";
 
-export default function About() {
+export default function Enter() {
     const [state, setState] = useState ({
         key: "",
         secret: "",
@@ -96,7 +98,7 @@ export default function About() {
         <br></br>
         <br></br>
         <div class="wager">
-            <large>ENTER LOTTERY</large>
+            <large><b>ENTER LOTTERY</b></large>
           <br></br>
           <br></br>
           <div class="homepag-sub">
@@ -147,7 +149,7 @@ export default function About() {
                 </div> 
               :
                 <div>
-                  {state.commitment}
+                  state.commitment
                 </div>
               }
             </div>
@@ -158,6 +160,20 @@ export default function About() {
             <br></br>
           </div>
           <div>
+        </div>
+        <div class="test-lottery">
+          <p>
+          Smart contract will be deployed in a few days once enough commitments are collected. 
+          For now, you can test out the functionality in a sample lottery <span></span>
+          <Link href='/airdrop/test' passHref>
+            <a class="test">
+              <span></span>HERE!
+            </a>
+          </Link>
+          </p>
+        </div>
+        <div className="mb-10">
+          <GoBack />
         </div>
       </section>
       
