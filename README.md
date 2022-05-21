@@ -1,4 +1,4 @@
-# ZKDrop: Private Airdrop System with Zero-Knowledge Proofs<br />
+# ZKDrop: Private Lottery Airdrop System with Zero-Knowledge Proofs<br />
 <br />
 Tal Derei <br />
 Zero-Knowledge University (ZKU)<br />
