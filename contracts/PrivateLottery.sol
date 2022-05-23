@@ -2,6 +2,7 @@
 pragma solidity ^0.8.11;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 // Plonk verifier function (proof, public signals)
 interface IPlonkVerifier {
@@ -9,20 +10,20 @@ interface IPlonkVerifier {
 }
 
 // ERC-20 transfer function (recipient, amount)
-interface IERC20 {
-    function transfer(address recipient, uint256 amount) external returns (bool);
+interface IERC721NFT {
+    function transferFrom(address sender, address recipient, uint256 tokenId) external;
 }
 
 // Lottery contract with merkle-tree inclusion proofs
-contract PrivateLottery is Ownable, Initializable {
+contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
     // State variables
-    IERC20 public airdrop;
-    uint public amount;
+    IERC721NFT public airdrop;
     IPlonkVerifier verifier;
     bytes32 public root;
     uint256[] commitments;
     uint256[] eligibleSet;
     uint256[] public _randomNumbers;
+    uint256 public nextTokenIdToBeAirdropped;
 
     // Map each address to nullifier -- i.e. whether user already collected airdrop
     mapping(bytes32 => bool) public nullifierSpent;
@@ -34,12 +35,15 @@ contract PrivateLottery is Ownable, Initializable {
     uint256 constant SNARK_FIELD = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
 
     // Constructor variables
-    function initialize (IERC20 _airdrop, uint _amount, IPlonkVerifier _verifier, bytes32 _root, uint256[] calldata _commitments) public initializer {
+    function initialize (IERC721NFT _airdrop, IPlonkVerifier _verifier, bytes32 _root, uint256[] calldata _commitments) public initializer {
         airdrop = _airdrop;
-        amount = _amount;
         verifier = _verifier;
         root = _root;
         commitments = _commitments;
+    }
+
+    function onERC721Received(address,address,uint256,bytes memory) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 
     function setRandomIndexes() public returns (uint256[] memory) {        
@@ -66,7 +70,7 @@ contract PrivateLottery is Ownable, Initializable {
 
     // Randomly select commitment from list of commitments as lottery winner
     function setRandomCommitment() public returns (uint256[] memory) {
-        for (uint256 i = 0; i < commitments.length / 2; i++) {
+        for (uint256 i = 0; i < 20; i++) {
             uint256 randomIndex = chooseRandomIndex();
             uint256 resultNumber = _randomNumbers[randomIndex];
             _randomNumbers[randomIndex] = _randomNumbers[_randomNumbers.length - 1];
@@ -110,7 +114,15 @@ contract PrivateLottery is Ownable, Initializable {
         nullifierSpent[nullifierHash] = true;
 
         // Transfer and collect airdrop
-        airdrop.transfer(msg.sender, amount);
+        airdrop.transferFrom(address(this), msg.sender, nextTokenIdToBeAirdropped);
+        nextTokenIdToBeAirdropped++;
+    }
+
+    function setInitialTokenId(uint256 quantity, uint256 initial) external returns (uint256) {
+        require(msg.sender == address(airdrop));
+        require (nextTokenIdToBeAirdropped < quantity);
+        nextTokenIdToBeAirdropped = initial; 
+        return nextTokenIdToBeAirdropped;
     }
 
     function getAllCommitments() public view returns (uint256[] memory) {

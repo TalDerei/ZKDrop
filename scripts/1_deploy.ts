@@ -10,28 +10,36 @@ import * as AIRDROP_JSON from "../frontend/abi/PrivateLottery.json";
 async function main() {
     const [signer] = await ethers.getSigners();
 
-    let commitmentsFileName = "./public/commitments.txt" 
+    let commitmentsFileName = "./public/commitments_sample.txt" 
     let output_file = "./frontend/public/commitments.txt"
-    let temp_file = "./public/commitments.txt"
-    let input: string = readFileSync(temp_file).toString();
+    let input: string = readFileSync(commitmentsFileName).toString();
     let commitments = input.trim().split(",");
     console.log(commitments)
+    console.log("commitments length is: ", commitments.length)
     // let commitmentsBigInt: BigInt[] = commitments.map(commitment => BigInt(commitment))
     // console.log(commitmentsBigInt)
-    let mt = getMerkleTreeFromPublicListOfCommitments(commitmentsFileName, output_file, 6)
+    let mt = getMerkleTreeFromPublicListOfCommitments(commitmentsFileName, output_file, 10)
     let newRoot = getMerkleRoot(mt)
     console.log("Root hash is: " + newRoot)
 
     // Deploy ERC-20 contract
-    let ERC20Contract = await waffle.deployContract(
-        signer, {bytecode: BYTECODE, abi: ABI},
-        [
-            "Harmony-ZK-Drop", 
-            "HZD", 
-            BigNumber.from(100_000),
-            signer.address
-        ])
-    console.log(`ERC-20 Address: ${ERC20Contract.address}`)
+    // let ERC20Contract = await waffle.deployContract(
+    //     signer, {bytecode: BYTECODE, abi: ABI},
+    //     [
+    //         "Harmony-ZK-Drop", 
+    //         "HZD", 
+    //         BigNumber.from(100_000),
+    //         signer.address
+    //     ])
+    // console.log(`ERC-20 Address: ${ERC20Contract.address}`)
+
+    // Deploy NFT contract
+    const nftcontractfactory = await ethers.getContractFactory(
+        "MintingContract"
+    );
+    const nftcontract = await nftcontractfactory.deploy();
+    await nftcontract.deployed();
+    console.log("NFT Contract Address: ", nftcontract.address);
     
     // Deploy circuit verifier contract
     const contractFactoryVerifier = await ethers.getContractFactory(
@@ -46,6 +54,7 @@ async function main() {
         "PrivateLottery"
     );
     const privateLottery = await privateLotteryContract.deploy();
+    
     await privateLottery.deployed();
     console.log("Private Lottery Contract Address: ", privateLottery.address);
 
@@ -63,8 +72,8 @@ async function main() {
     let txn = await factory
         .connect(signer)
         .createLottery(
-            ERC20Contract.address,
-            BigNumber.from(10_000),
+            // ERC20Contract.address,
+            nftcontract.address,
             contractLotteryVerifier.address,
             newRoot, 
             commitments
@@ -75,6 +84,8 @@ async function main() {
     const { args } = events.find(Boolean);
     const proxyAddress = args[0];
     console.log("Proxy address is: ", proxyAddress)
+
+    console.log("signer eth balance: ", signer.getBalance())
 
     // Get commitments stored as calldata in smart contract
     let contract = new Contract(proxyAddress, AIRDROP_JSON.abi, signer);
@@ -103,7 +114,12 @@ async function main() {
     // console.log(eligible);
 
     // Transfer ERC-20 to contract
-    await ERC20Contract.transfer(proxyAddress, 50_000);
+    // await ERC20Contract.transfer(proxyAddress, 50_000);
+
+    // Mint NFTs to contract
+    let nft_tx = await nftcontract.mint(proxyAddress, "test-uri", commitments.length, 1);
+    nft_tx.wait();
+    // console.log(`# ${quantity} NFTs succefully minted and trasferred to ${AIRDROP_ADDR}` )
 }
 
 main()
