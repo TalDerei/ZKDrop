@@ -1,11 +1,11 @@
 import {randomBigInt} from "../utils/util";
-import {toHex, pedersenHashConcat } from "../frontend/zkp-merkle-airdrop-libs";
+import {toHex, pedersenHashConcat } from "../frontend/zkp-merkle-airdrop-libs/lib";
 var fs = require('fs')
 
 async function main() {
     let commitments_file = "./public/commitments_sample.txt" 
 
-    for (let i = 0; i < 300; i++) {
+    for (let i = 0; i < 128; i++) {
         let nullifier = toHex(randomBigInt(31)) 
         let secret = toHex(randomBigInt(31))
         // console.log("Key is: " + nullifier)

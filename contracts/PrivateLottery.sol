@@ -14,9 +14,16 @@ interface IERC721NFT {
     function transferFrom(address sender, address recipient, uint256 tokenId) external;
 }
 
+// ERC-20 transfer function (recipient, amount)
+interface IERC20 {
+    function transfer(address recipient, uint256 amount) external returns (bool);
+}
+
 // Lottery contract with merkle-tree inclusion proofs
 contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
     // State variables
+    IERC20 public airdrop_erc;
+    uint public amount;
     IERC721NFT public airdrop;
     IPlonkVerifier verifier;
     bytes32 public root;
@@ -35,7 +42,9 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
     uint256 constant SNARK_FIELD = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
 
     // Constructor variables
-    function initialize (IERC721NFT _airdrop, IPlonkVerifier _verifier, bytes32 _root, uint256[] calldata _commitments) public initializer {
+    function initialize (IERC20 _airdrop_erc, uint _amount, IERC721NFT _airdrop, IPlonkVerifier _verifier, bytes32 _root, uint256[] calldata _commitments) public initializer {
+        airdrop_erc = _airdrop_erc;
+        amount = _amount;
         airdrop = _airdrop;
         verifier = _verifier;
         root = _root;
@@ -70,7 +79,7 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
 
     // Randomly select commitment from list of commitments as lottery winner
     function setRandomCommitment() public returns (uint256[] memory) {
-        for (uint256 i = 0; i < commitments.length / 2; i++) {
+        for (uint256 i = 0; i < commitments.length; i++) {
             uint256 randomIndex = chooseRandomIndex();
             uint256 resultNumber = _randomNumbers[randomIndex];
             _randomNumbers[randomIndex] = _randomNumbers[_randomNumbers.length - 1];
@@ -113,9 +122,12 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
         // Set nullifier hash to true
         nullifierSpent[nullifierHash] = true;
 
-        // Transfer and collect airdrop
+        // Transfer and collect nft airdrop
         airdrop.transferFrom(address(this), msg.sender, nextTokenIdToBeAirdropped);
         nextTokenIdToBeAirdropped++;
+
+        // Transfer and collect erc airdrop
+        airdrop_erc.transfer(msg.sender, amount);
     }
 
     function setInitialTokenId(uint256 quantity, uint256 initial) external returns (uint256) {

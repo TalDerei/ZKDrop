@@ -75,34 +75,16 @@ export default function Test () {
         let address = await signer.getAddress();
         console.log("address is: " + address)
         
-        // Compute a commitment locally
-        // state.computedCommitment = toHex(pedersenHashConcat(BigInt(state.key), BigInt(state.secret)));
-        // console.log("!!!!!!!!!!!!!! computed commitment is: " + state.computedCommitment)
-        
         // Load files and run proof locally
         let mtSs = await getFileString(`http://localhost:3000/commitments.txt`);
         let wasmBuff = await getFileBuffer(`http://localhost:3000/circuit.wasm`);
         let zkeyBuff = await getFileBuffer(`http://localhost:3000/circuit_final.zkey`);
         console.log(mtSs)
         let commitments = mtSs.trim().split(",");
-        // console.log(commitments)
-        
-        // let treeheight = 5
 
         let commitmentsBigInt = commitments.map(commitment => BigInt(commitment))
         console.log(commitmentsBigInt)
-        // // for (let i = commitments.length; i < 2 ** treeheight; i++) {
-        // //     commitmentsBigInt.push(randomBigInt(31));
-        // // }
-        // // let commitmentsBigInts = commitmentsBigInt.map(commitmentsBigInt => BigInt(commitmentsBigInt))
-        // console.log("wooooo!")
-        // console.log(commitmentsBigInt)
 
-        // // console.log(crypto.randomBytes(31))
-        
-        
-        // Load the Merkle Tree locally
-        // let mt = MerkleTree.createFromStorageString(mtSs);
         let mt = MerkleTree.createFromLeaves(commitmentsBigInt);
 
         if (!mt.leafExists(BigInt(state.computedCommitment))) {
@@ -112,6 +94,8 @@ export default function Test () {
         }
         console.log("merkle root is: " + toHex(mt.root.val))
         
+        alert("Proof being generated. This can take up to 30 seconds!")
+
         let proof = await generateProofCallData(mt, BigInt(state.key), BigInt(state.secret), address, wasmBuff, zkeyBuff);
 
         console.log("proof is: " + proof);
@@ -140,6 +124,7 @@ export default function Test () {
             await tx.wait()
             console.log(tx.hash)
             state.airdrop = tx.hash;
+            alert("Airdrop collected. Transaction hash is: " + state.airdrop);
         } catch (error) {
             alert("Airdrop collection failed: " + error['data']['message'])
         }

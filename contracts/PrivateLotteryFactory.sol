@@ -20,6 +20,8 @@ contract PrivateLotteryFactory {
 
     // Create private lottery contract
     function createLottery (
+        IERC20 _airdrop_erc,
+        uint _amount,
         IERC721NFT _airdrop,
         IPlonkVerifier _verifier,
         bytes32 _root,
@@ -27,6 +29,8 @@ contract PrivateLotteryFactory {
     ) external payable returns (address lotteryContract) {
         lotteryContract = Clones.clone(proxyContract);
         PrivateLottery(lotteryContract).initialize(
+            _airdrop_erc, 
+            _amount, 
             _airdrop, 
             _verifier,
             _root,

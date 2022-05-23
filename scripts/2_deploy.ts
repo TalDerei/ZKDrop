@@ -23,15 +23,15 @@ async function main() {
     console.log("Root hash is: " + newRoot)
 
     // Deploy ERC-20 contract
-    // let ERC20Contract = await waffle.deployContract(
-    //     signer, {bytecode: BYTECODE, abi: ABI},
-    //     [
-    //         "Harmony-ZK-Drop", 
-    //         "HZD", 
-    //         BigNumber.from(100_000),
-    //         signer.address
-    //     ])
-    // console.log(`ERC-20 Address: ${ERC20Contract.address}`)
+    let ERC20Contract = await waffle.deployContract(
+        signer, {bytecode: BYTECODE, abi: ABI},
+        [
+            "Harmony-ZK-Drop-Test", 
+            "HZDT", 
+            BigNumber.from(100_000),
+            signer.address
+        ])
+    console.log(`ERC-20 Address: ${ERC20Contract.address}`)
 
     // Deploy NFT contract
     const nftcontractfactory = await ethers.getContractFactory(
@@ -73,6 +73,8 @@ async function main() {
         .connect(signer)
         .createLottery(
             // ERC20Contract.address,
+            ERC20Contract.address,
+            BigNumber.from(500),
             nftcontract.address,
             contractLotteryVerifier.address,
             newRoot, 
@@ -107,17 +109,12 @@ async function main() {
     var getCommitment = await contract.getRandomCommitment();
     console.log(getCommitment);
 
-    // console.log("True or False: ")
-    // var eligible = await contract.getEligible(0x1775e0bf4871ccdcdd3b79d1cea52894870ea81b4280af1a1a7924d016aa20a3);
-    // console.log(eligible);
-
-    // Transfer ERC-20 to contract
-    // await ERC20Contract.transfer(proxyAddress, 50_000);
-
     // Mint NFTs to contract
     let nft_tx = await nftcontract.mint(proxyAddress, "test-uri", commitments.length, 1);
     nft_tx.wait();
-    // console.log(`# ${quantity} NFTs succefully minted and trasferred to ${AIRDROP_ADDR}` )
+
+    // Transfer ERC-20 to contract
+    await ERC20Contract.transfer(proxyAddress, 100_000);
 }
 
 main()
