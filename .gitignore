@@ -4,6 +4,6 @@ typechain/
 artifacts/
 coverage*
 .env
-package-lock.json
+package-lock.json 
 .DS_Store
 scripts/commitments.sh

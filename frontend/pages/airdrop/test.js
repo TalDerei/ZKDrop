@@ -6,8 +6,6 @@ import * as AIRDROP_JSON from "../../abi/PrivateLottery.json";
 import GoBack from "../../components/goBack";
 import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";
-import { pedersenHashMine, toBufferLE } from '../../utils/src/circuit';
-import Link from "next/link";
 import Footer from "../../components/footer";
 import ViewSourceCode from "../../components/viewSourceCode";
 
