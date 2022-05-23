@@ -54,7 +54,7 @@ async function main() {
         "PrivateLottery"
     );
     const privateLottery = await privateLotteryContract.deploy();
-    
+
     await privateLottery.deployed();
     console.log("Private Lottery Contract Address: ", privateLottery.address);
 
@@ -84,8 +84,6 @@ async function main() {
     const { args } = events.find(Boolean);
     const proxyAddress = args[0];
     console.log("Proxy address is: ", proxyAddress)
-
-    console.log("signer eth balance: ", signer.getBalance())
 
     // Get commitments stored as calldata in smart contract
     let contract = new Contract(proxyAddress, AIRDROP_JSON.abi, signer);

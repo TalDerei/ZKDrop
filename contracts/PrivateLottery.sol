@@ -64,13 +64,13 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
 
     // Randomly select commitment from list of commitments as lottery winner
     function chooseRandomIndex () public view returns (uint256) {
-        uint256 index = random() % commitments.length;
+        uint256 index = random() % _randomNumbers.length;
         return index;
     }
 
     // Randomly select commitment from list of commitments as lottery winner
     function setRandomCommitment() public returns (uint256[] memory) {
-        for (uint256 i = 0; i < 20; i++) {
+        for (uint256 i = 0; i < commitments.length / 2; i++) {
             uint256 randomIndex = chooseRandomIndex();
             uint256 resultNumber = _randomNumbers[randomIndex];
             _randomNumbers[randomIndex] = _randomNumbers[_randomNumbers.length - 1];
