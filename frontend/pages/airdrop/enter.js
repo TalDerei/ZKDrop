@@ -2,16 +2,14 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from 'react';
 import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";
-import Form from "../../components/form";
-import { pedersenHashConcat, toHex } from '../../zkp-merkle-airdrop-libs/lib';
-import sjcl from 'sjcl'
+import { pedersenHashConcat, toHex, toBigIntLE } from '../../zkp-merkle-airdrop-libs/lib';
 import Gist from "../../components/gist";
 import GoBack from "../../components/goBack";
 var uuid = require("uuid");
 import Link from "next/link";
 import Footer from "../../components/footer";
 import ViewSourceCode from "../../components/viewSourceCode";
-import {toBigIntLE} from "../../../utils/util"
+// import {toBigIntLE} from "../../../utils/util"
 let cryptos = require('crypto-browserify')
 
 export default function Enter() {

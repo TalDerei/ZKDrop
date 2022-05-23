@@ -114,3 +114,13 @@ function toBufferLE(bi: BigInt, width: number): Buffer {
     buffer.reverse();
     return buffer;
 }
+
+export function toBigIntLE (buff: Buffer) {
+    const reversed = Buffer.from(buff);
+    reversed.reverse();
+    const hex = reversed.toString('hex');
+    if (hex.length === 0) {
+      return BigInt(0);
+    }
+    return BigInt(`0x${hex}`);
+}

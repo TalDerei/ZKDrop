@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toHex = exports.pedersenHashConcat = exports.pedersenHash = exports.mimcSponge = exports.generateProofCallData = void 0;
+exports.toBigIntLE = exports.toHex = exports.pedersenHashConcat = exports.pedersenHash = exports.mimcSponge = exports.generateProofCallData = void 0;
 /**
  * Library which abstracts away much of the details required to interact with the private airdrop contract.
  */
@@ -140,3 +140,13 @@ function toBufferLE(bi, width) {
     buffer.reverse();
     return buffer;
 }
+function toBigIntLE(buff) {
+    var reversed = Buffer.from(buff);
+    reversed.reverse();
+    var hex = reversed.toString('hex');
+    if (hex.length === 0) {
+        return BigInt(0);
+    }
+    return BigInt("0x".concat(hex));
+}
+exports.toBigIntLE = toBigIntLE;

@@ -5,3 +5,4 @@ export declare function mimcSponge(l: BigInt, r: BigInt): BigInt;
 export declare function pedersenHash(nullifier: BigInt): BigInt;
 export declare function pedersenHashConcat(nullifier: BigInt, secret: BigInt): BigInt;
 export declare function toHex(number: BigInt, length?: number): string;
+export declare function toBigIntLE(buff: Buffer): bigint;
