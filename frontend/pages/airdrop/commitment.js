@@ -124,7 +124,7 @@ export default function Commitment () {
             state.airdrop = tx.hash;
             alert("Airdrop collected. Transaction hash is: " + state.airdrop);
         } catch (error) {
-            alert("Airdrop collection failed. Please enter valid airdrop contract address and try again!")
+            alert("Airdrop collection failed: " + error['data']['message'])
         }
         setState({...state})
     }
