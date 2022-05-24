@@ -33,7 +33,8 @@
     "three": "^0.124.0",
     "typescript": "^4.6.3",
     "vanta": "^0.5.22",
-    "web3-utils": "^1.7.3"
+    "web3-utils": "^1.7.3",
+    "circomlibjs": "0.0.8"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
