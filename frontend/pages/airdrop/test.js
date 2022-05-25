@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Form from "../../components/form";
 import { MerkleTree, generateProofCallData, pedersenHashConcat, toHex, pedersenHash } from '../../zkp-merkle-airdrop-libs/lib';
 import { providers, Contract, ethers, BigNumber } from 'ethers';
-import * as AIRDROP_JSON from "../../abi/PrivateLottery.json";
+import AIRDROP_JSON from "../../abi/PrivateLottery.json";
 import GoBack from "../../components/goBack";
 import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";

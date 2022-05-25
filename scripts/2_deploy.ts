@@ -5,7 +5,7 @@ import { getMerkleTreeFromPublicListOfCommitments, getMerkleRoot } from '../util
 import { readFileSync, writeFileSync } from 'fs';
 import { hexStripZeros } from "ethers/lib/utils";
 import { providers, Contract } from 'ethers';
-import * as AIRDROP_JSON from "../frontend/abi/PrivateLottery.json";
+import AIRDROP_JSON from "../frontend/abi/PrivateLottery.json";
 
 async function main() {
     const [signer] = await ethers.getSigners();
