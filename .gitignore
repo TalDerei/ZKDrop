@@ -6,4 +6,3 @@ coverage*
 .env
 package-lock.json 
 .DS_Store
-scripts/commitments.sh
