@@ -80,6 +80,8 @@ export default function Test () {
         console.log(mtSs)
         let commitments = mtSs.trim().split(",");
 
+        console.log(commitments)
+
         let commitmentsBigInt = commitments.map(commitment => BigInt(commitment))
         console.log(commitmentsBigInt)
 
