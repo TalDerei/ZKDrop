@@ -163,6 +163,11 @@ export default function Test () {
                         SAMPLE LOTTERY:</large>
                     <br></br>
                     <large>CHECK LOTTERY STATUS</large>
+                    <br></br>
+                    <br></br>
+                    <small>Smart Contract Address: 0x2E53C9CECeBFF7F325b1583EEc5b64C64f7755eb</small>
+                    <br></br>
+                    <small>Sample Keys/Nullifiers: https://github.com/TalDerei/ZKDrop/blob/main/public/commitments_sample_list.txt</small>
                 </div>
                 <div class="form-class-top">
                     <Form 
