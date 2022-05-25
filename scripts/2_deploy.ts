@@ -16,8 +16,6 @@ async function main() {
     let commitments = input.trim().split(",");
     console.log(commitments)
     console.log("commitments length is: ", commitments.length)
-    // let commitmentsBigInt: BigInt[] = commitments.map(commitment => BigInt(commitment))
-    // console.log(commitmentsBigInt)
     let mt = getMerkleTreeFromPublicListOfCommitments(commitmentsFileName, output_file, 10)
     let newRoot = getMerkleRoot(mt)
     console.log("Root hash is: " + newRoot)
@@ -27,8 +25,8 @@ async function main() {
         signer, {bytecode: BYTECODE, abi: ABI},
         [
             "Harmony-ZK-Drop-Test", 
-            "HZDT", 
-            BigNumber.from(100_000),
+            "ZKDROP", 
+            BigNumber.from(500_000),
             signer.address
         ])
     console.log(`ERC-20 Address: ${ERC20Contract.address}`)
@@ -72,9 +70,8 @@ async function main() {
     let txn = await factory
         .connect(signer)
         .createLottery(
-            // ERC20Contract.address,
             ERC20Contract.address,
-            BigNumber.from(500),
+            BigNumber.from(10_000),
             nftcontract.address,
             contractLotteryVerifier.address,
             newRoot, 
@@ -109,12 +106,14 @@ async function main() {
     var getCommitment = await contract.getRandomCommitment();
     console.log(getCommitment);
 
-    // Mint NFTs to contract
-    let nft_tx = await nftcontract.mint(proxyAddress, "test-uri", commitments.length, 1);
-    nft_tx.wait();
+    // Mint NFTs to proxy contract
+    // let nft_tx = await nftcontract.mint(proxyAddress, "test-uri", commitments.length, 1);
+    // nft_tx.wait();
+    // console.log(`Transfered NFTs to ${proxyAddress}`)
 
-    // Transfer ERC-20 to contract
-    await ERC20Contract.transfer(proxyAddress, 100_000);
+    // Transfer ERC-20 to proxy contract
+    await ERC20Contract.transfer(proxyAddress, 400_000);
+    console.log(`Transfered erc-20 to ${proxyAddress}`)
 }
 
 main()

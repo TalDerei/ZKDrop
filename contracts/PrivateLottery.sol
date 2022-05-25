@@ -9,7 +9,7 @@ interface IPlonkVerifier {
     function verifyProof(bytes memory proof, uint[] memory pubSignals) external view returns (bool);
 }
 
-// ERC-20 transfer function (recipient, amount)
+// ERC-721 transfer function (sender, recipient, tokenId)
 interface IERC721NFT {
     function transferFrom(address sender, address recipient, uint256 tokenId) external;
 }
@@ -102,34 +102,6 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
         return Eligible[_commitment];
     }
 
-    // Verify proof, updated nullifier set, collect airdrop
-    function collectAirdrop(uint256 commitment, bytes calldata proof, bytes32 nullifierHash) public {
-        // Make sure commitment is in the eligibility set
-        require(getEligible(commitment), "Commitment is not in the eligibility set");
-
-        // Check against nullifier set (i.e. nullifier hash to false)
-        require(uint256(nullifierHash) < SNARK_FIELD ,"Nullifier is not within the field");
-        require(!nullifierSpent[nullifierHash], "Airdrop already redeemed");
-
-        // Plonk verifier to verify proof
-        uint[] memory pubSignals = new uint[](3);
-        pubSignals[0] = uint256(root);
-        pubSignals[1] = uint256(nullifierHash);
-        pubSignals[2] = uint256(uint160(msg.sender));
-        // add another public signal for commitment chosen
-        require(verifier.verifyProof(proof, pubSignals), "Proof verification failed");
-
-        // Set nullifier hash to true
-        nullifierSpent[nullifierHash] = true;
-
-        // Transfer and collect nft airdrop
-        airdrop.transferFrom(address(this), msg.sender, nextTokenIdToBeAirdropped);
-        nextTokenIdToBeAirdropped++;
-
-        // Transfer and collect erc airdrop
-        airdrop_erc.transfer(msg.sender, amount);
-    }
-
     function setInitialTokenId(uint256 quantity, uint256 initial) external returns (uint256) {
         require(msg.sender == address(airdrop));
         require (nextTokenIdToBeAirdropped < quantity);
@@ -139,5 +111,33 @@ contract PrivateLottery is Ownable, Initializable, IERC721Receiver {
 
     function getAllCommitments() public view returns (uint256[] memory) {
         return commitments;
+    }
+
+    // Verify proof, updated nullifier set, collect airdrop
+    function collectAirdrop(uint256 commitment, bytes calldata proof, bytes32 nullifierHash) public {
+        // Make sure commitment is in the eligibility set
+        require(getEligible(commitment), "Commitment is not in the eligibility set!");
+
+        // Check against nullifier set (i.e. nullifier hash to false)
+        require(uint256(nullifierHash) < SNARK_FIELD ,"Nullifier is not within the field!");
+        require(!nullifierSpent[nullifierHash], "Airdrop already redeemed!");
+
+        // Plonk verifier to verify proof
+        uint[] memory pubSignals = new uint[](3);
+        pubSignals[0] = uint256(root);
+        pubSignals[1] = uint256(nullifierHash);
+        pubSignals[2] = uint256(uint160(msg.sender));
+        // add another public signal for commitment chosen
+        require(verifier.verifyProof(proof, pubSignals), "Proof verification failed!");
+
+        // Set nullifier hash to true
+        nullifierSpent[nullifierHash] = true;
+
+         // Transfer and collect erc-20 airdrop
+        airdrop_erc.transfer(msg.sender, amount);
+
+        // // Transfer and collect nft airdrop
+        // airdrop.transferFrom(address(this), msg.sender, nextTokenIdToBeAirdropped);
+        // nextTokenIdToBeAirdropped++;
     }
 }

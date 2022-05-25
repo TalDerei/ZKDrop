@@ -119,7 +119,7 @@ export default function Test () {
 
         try {
             let tx = await contract.collectAirdrop(state.computedCommitment, proof, toHex(keyHash));
-            await tx.wait()
+            // await tx.wait()
             console.log(tx.hash)
             state.airdrop = tx.hash;
             alert("Airdrop collected. Transaction hash is: " + state.airdrop);
