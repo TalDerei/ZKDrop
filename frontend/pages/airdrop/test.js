@@ -8,6 +8,7 @@ import NET from "vanta/dist/vanta.net.min";
 import * as THREE from "three";
 import Footer from "../../components/footer";
 import ViewSourceCode from "../../components/viewSourceCode";
+import Link from "next/link";
 
 // import * as crypto from "crypto";
 const crypto = require("crypto");
@@ -167,9 +168,9 @@ export default function Test () {
                     <large>CHECK LOTTERY STATUS</large>
                     <br></br>
                     <br></br>
-                    <small>Smart Contract Address: 0x2E53C9CECeBFF7F325b1583EEc5b64C64f7755eb</small>
+                    <small>Smart Contract Address: 0x8a2A73572866383859d9dce07b7A8877C8Ca01fF</small>
                     <br></br>
-                    <small>Sample Keys/Nullifiers: https://github.com/TalDerei/ZKDrop/blob/main/public/commitments_sample_list.txt</small>
+                    <small>Sample Key/Secret Pairs: </small>
                 </div>
                 <div class="form-class-top">
                     <Form 
@@ -235,6 +236,13 @@ export default function Test () {
             </div>
             <div>
                 <ViewSourceCode />
+            </div>
+            <div class="Here-new">
+                <Link href='https://github.com/TalDerei/ZKDrop/blob/main/public/commitments_sample_list.txt' passHref>
+                    <a class="test">
+                    <span></span>HERE!
+                    </a>
+                </Link>
             </div>
             </section>
         </main>

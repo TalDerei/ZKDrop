@@ -45,11 +45,13 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <div>
-        <Footer />
-      </div>
-      <div>
-        <ViewSourceCode />
+      <div class="pairs">
+        <div>
+          <Footer />
+        </div>
+        <div>
+          <ViewSourceCode />
+        </div>
       </div>
       <div>
         <Home/>

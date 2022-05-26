@@ -22,5 +22,11 @@ module.exports = {
       gas: 9900000,
       gasPrice: 80000000000
     },
+    mainnet: {
+      url: `https://api.harmony.one`,
+      accounts: [process.env.TESTNET_PRIVATE_KEY],
+      gas: 9900000,
+      gasPrice: 80000000000
+    },
   },
 };

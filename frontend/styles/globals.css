@@ -48,7 +48,7 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size:20px;
   position: fixed;
-  left: 45%;
+  left: 42%;
   bottom: 20px;
   margin: 0 auto;
 }
@@ -58,7 +58,7 @@ body {
   font-size: 20px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   position: fixed;
-  left: 50%;
+  left: 47%;
   bottom: 20px;
   margin: 0 auto;
 }
@@ -304,4 +304,15 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 20px;
   color:antiquewhite;
+}
+
+.Here-new{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 20px;
+  position:fixed; right:525px; top:162px;
+  color:antiquewhite;
+}
+
+.pairs{
+  color:yellow;
 }
