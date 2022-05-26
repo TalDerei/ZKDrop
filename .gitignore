@@ -3,6 +3,5 @@ cache/
 typechain/
 artifacts/
 coverage*
-.env
-package-lock.json 
+.env 
 .DS_Store

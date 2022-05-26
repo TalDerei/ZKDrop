@@ -80,6 +80,7 @@ async function main() {
 
     // Retrieve proxy contract address
     const { events } = await txn.wait();
+    console.log(events);
     const { args } = events.find(Boolean);
     const proxyAddress = args[0];
     console.log("Proxy address is: ", proxyAddress)
