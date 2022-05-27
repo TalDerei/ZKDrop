@@ -78,9 +78,9 @@ export default function Test () {
         // let mtSs = await getFileString(`http://localhost:3000/commitments.txt`);
         // let wasmBuff = await getFileBuffer(`http://localhost:3000/circuit.wasm`);
         // let zkeyBuff = await getFileBuffer(`http://localhost:3000/circuit_final.zkey`);
-        let mtSs = await getFileString(`http://zk-drop.vercel.app/commitments.txt`);
-        let wasmBuff = await getFileBuffer(`http://zk-drop.vercel.app/circuit.wasm`);
-        let zkeyBuff = await getFileBuffer(`http://zk-drop.vercel.app/circuit_final.zkey`);
+        let mtSs = await getFileString(`https://zk-drop.vercel.app/commitments.txt`);
+        let wasmBuff = await getFileBuffer(`https://zk-drop.vercel.app/circuit.wasm`);
+        let zkeyBuff = await getFileBuffer(`https://zk-drop.vercel.app/circuit_final.zkey`);
         console.log(mtSs)
         let commitments = mtSs.trim().split(",");
 
