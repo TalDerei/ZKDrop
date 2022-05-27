@@ -27,9 +27,17 @@ https://gist.github.com/TalDerei/513712a2fd147183b6cbd8a8c4ea3ac1
 
 ## Project Structure / Codebase
 
+```Build```
+
+Hermez Power's of Tau ceremony ceremony, circuit .wasm file and verification key
+
 ```Circuits```
 
-Contains the circom circuit with merkletree-based functionalty
+Circom circuits with merkletree-based functionalty
+
+```Contracts```
+
+Solidity smart contracts 
 
 ```Frontend```
 
@@ -38,6 +46,10 @@ Frontend code containing a React/NextJS framework hosted on Vercel
 ```Scripts```
 
 Running Powers of Tau Ceremony and deploying verification smart contracts and keys respectively
+
+```Public```
+
+Sample keys, secrets, and commitments
 
 ## Tools and Resources
 
@@ -73,7 +85,7 @@ Run "**_npm install_**" inside the root directory in order to install the proper
 
 1\. **Execute Scripts:**
 
-- `Scripts` folder contains the following executeable scripts and typescript files:
+- `scripts` folder contains the following executeable scripts and typescript files:
   * **0_groth16.sh**: groth16 prover
   * **0_plonk.sh**: plonk prover
   * **1_commitments.ts**: generates sample key/secret pairs + commitments
