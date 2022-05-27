@@ -105,4 +105,4 @@ Run "**_npm install_**" inside the root directory in order to install the proper
 
 Credit to A16Z (https://github.com/a16z/zkp-merkle-airdrop-contracts). This application modifies the A16Z core repo by incorperating proxy patterns to smart contracts and adding a lottery system, implementing ERC-721 (in addition to ERC-20) private airdrops, and interactive NextJS UI.
 
-The circuits (withdraw.circom and merkleTree.circom) are referenced from and build on a simplified version of the Tornado Cash: https://github.com/chnejohnson/simple-tornado
+The circuit.circom circuit is referenced from and builds on a simplified version of the Tornado Cash: https://github.com/chnejohnson/simple-tornado
