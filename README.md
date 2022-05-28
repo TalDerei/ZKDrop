@@ -26,7 +26,7 @@ https://www.youtube.com/watch?v=dwbhJYUpA2E
 
 https://gist.github.com/TalDerei/513712a2fd147183b6cbd8a8c4ea3ac1
 
-## Project Structure / Codebase
+## Project Structure
 
 ```Build```
 
@@ -93,7 +93,7 @@ Run "**_npm install_**" inside the root directory in order to install the proper
   * **0_plonk.sh**: plonk prover
   * **1_commitments.ts**: generates sample key/secret pairs + commitments
   * **2_deploy.ts**: deploys solidity smart contracts
-- Inside the root directory, add a "**.env**" file with your metamask private key. Then run "**sh scripts/0_plonk.sh**" to generate plonk prover, verification smart contract, and verifier keys. This generates a `build` folder in the root directory, and copies over the circuit_final.zkey and circuit.wasm (web friendly circuit representation in web assembly) to the `frontend/public` folder, making it available to the browser.
+- Inside the root directory, add a "**.env**" file with your metamask private key. Then run "**sh scripts/0_plonk.sh**" that generates a `build` folder in the root directory containing the compiled plonk circuit, verification smart contract, and verifier key. It then copies over the circuit_final.zkey and circuit.wasm (web friendly circuit representation in web assembly) to the `frontend/public` folder, making it available to the browser.
 - Inside the root directory, then delete the existing sample commitments .txt files in `public`, and run "**npx hardhat run scripts/1_commitments.ts --network localhost**" which generates the sample commitments that will be deployed in the smart contract as calldata. 
 - Inside the root directory, then run "**npx hardhat run scripts/2_deploy.ts --network localhost**" to deploy the sample smart contracts on localhost. You can change 'localhost' to either 'testnet' or 'mainnet' to deploy on the [Harmony Testnet](explorer.pops.one) or [Harmony Mainnet](explorer.harmony.one) respectively. The typscript file deploys:
   * ERC-20 contract (ERC20PresetFixedSupply Openzeppelin Contract)
@@ -109,9 +109,9 @@ These contracts are structured according to the [Factory Design Pattern](https:/
 
 - Start up a local ganache client or run "**npx hardhat node**" in a seperate terminal to spin up a local hardhat blockchain network. Then start up the developement server with "npm run dev" on the `frontend` in a seperate terminal window, and navigate to "http://localhost:3000/airdrop/test". The UI page contains 3 buttons:
   *  "Calculate Commitment", computes a commitment by hashing two private values (a secret and a nullifier), and checks the commitment against a merkle tree of commitments by generating a merkle path proof.
- *  "Calculate Proof", generates the proof calldata by using the public verification key (circuit_final.zkey), compiled zero knowledge circuit (circuit.wasm), private key/secret pair used to construct the commitment, and nullifierHash to avoid double spending. 
- *  "Collect Drop", passes the proof and nullifierHash to the verification smart contract. 
+  *  "Calculate Proof", generates the proof calldata by using the public verification key (circuit_final.zkey), compiled zero knowledge circuit (circuit.wasm), private key/secret pair used to construct the commitment, and nullifierHash to avoid double spending. 
+  *  "Collect Drop", passes the proof and nullifierHash to the verification smart contract. 
 
 ## Credits and Related Work<br />
 
-Credit to A16Z (https://github.com/a16z/zkp-merkle-airdrop-lib). This application modifies the A16Z core repo by incorperating factory and proxy patterns to the smart contracts and adding a lottery system, implementing ERC-721 (in addition to ERC-20) private airdrops, and interactive NextJS UI.
+Credit to A16Z (https://github.com/a16z/zkp-merkle-airdrop-lib). This application modifies the A16Z core repo by incorperating the cloned factory and proxy patterns to the smart contracts and adding a lottery system, implementing ERC-721 (in addition to ERC-20) private airdrops, and interactive NextJS UI.
